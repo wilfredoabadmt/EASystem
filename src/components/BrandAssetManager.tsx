@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { SECRETARIAS_MUNICIPALES } from '../tokens/brandTokens';
+import { AssetExporterService } from '../services/assetExporterService';
 
 export interface AssetItem {
   id: string;
@@ -115,6 +116,8 @@ export const BrandAssetManager: React.FC = () => {
   const [selectedFolder, setSelectedFolder] = useState<string>('todos');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [assets, setAssets] = useState<AssetItem[]>([]);
+  const [isZipping, setIsZipping] = useState(false);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   
   // Modal de Subida de Archivos
   const [isUploadOpen, setIsUploadOpen] = useState(false);
@@ -241,87 +244,161 @@ export const BrandAssetManager: React.FC = () => {
     }
   };
 
-  // Descarga real de activo
-  const handleDownloadAsset = (item: AssetItem) => {
-    let content = item.fileData;
-    let mimeType = 'text/plain';
+  // Descarga real de activo (100% nativo para Word .docx, PDF y SVG)
+  const handleDownloadAsset = async (item: AssetItem) => {
+    try {
+      setDownloadingId(item.id);
 
-    if (item.format === 'SVG') {
-      mimeType = 'image/svg+xml;charset=utf-8';
-      if (!content) {
-        content = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100"><rect width="300" height="100" fill="#4B008F"/><text x="20" y="55" fill="#FFF" font-family="sans-serif" font-size="20">${item.name}</text></svg>`;
-      }
-    } else if (item.format === 'PNG' || item.format === 'JPG') {
-      if (content && content.startsWith('data:')) {
+      // CASO 1: Documento Microsoft Word (.docx)
+      if (item.format === 'DOCX') {
+        const docxBlob = await AssetExporterService.generateOfficialDocx(item.name, item.secretaria);
+        const url = URL.createObjectURL(docxBlob);
         const a = document.createElement('a');
-        a.href = content;
-        a.download = item.name;
+        a.href = url;
+        a.download = item.name.endsWith('.docx') ? item.name : `${item.name}.docx`;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
         return;
       }
-      // Generar canvas simple para mockup
-      const canvas = document.createElement('canvas');
-      canvas.width = 600;
-      canvas.height = 300;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.fillStyle = '#150A2B';
-        ctx.fillRect(0, 0, 600, 300);
-        ctx.fillStyle = '#F5007B';
-        ctx.fillRect(0, 0, 600, 8);
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = 'bold 24px Montserrat, sans-serif';
-        ctx.fillText(item.name, 40, 140);
-        ctx.font = '16px Poppins, sans-serif';
-        ctx.fillStyle = '#008F89';
-        ctx.fillText(`GAMEA • ${item.secretaria} • Activo Oficial Certificado`, 40, 180);
+
+      // CASO 2: Documento PDF Oficial (.pdf)
+      if (item.format === 'PDF') {
+        const pdfBlob = AssetExporterService.generateOfficialPdf(item.name, item.secretaria);
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = item.name.endsWith('.pdf') ? item.name : `${item.name}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        return;
       }
-      const dataUrl = canvas.toDataURL('image/png');
+
+      // CASO 3: Vectorial SVG (.svg)
+      if (item.format === 'SVG') {
+        const content = item.fileData || `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120"><rect width="400" height="120" fill="#090314" rx="12"/><polygon points="30,85 55,30 80,85" fill="#4B008F"/><polygon points="40,85 55,50 70,85" fill="#F5007B"/><text x="100" y="60" fill="#FFFFFF" font-family="Montserrat, sans-serif" font-size="28" font-weight="900">EL ALTO</text><text x="100" y="85" fill="#008F89" font-family="Poppins, sans-serif" font-size="14" font-weight="600">GOBIERNO AUTÓNOMO MUNICIPAL</text></svg>`;
+        const blob = new Blob([content], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = item.name.endsWith('.svg') ? item.name : `${item.name}.svg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        return;
+      }
+
+      // CASO 4: Imagen Rasterizada PNG o JPG
+      if (item.format === 'PNG' || item.format === 'JPG') {
+        if (item.fileData && item.fileData.startsWith('data:image')) {
+          const a = document.createElement('a');
+          a.href = item.fileData;
+          a.download = item.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          return;
+        }
+
+        // Generar canvas nítido en alta resolución
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 630;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.fillStyle = '#090314';
+          ctx.fillRect(0, 0, 1200, 630);
+          
+          // Franja superior de Aguayo
+          const colors = ['#4B008F', '#F5007B', '#F5B400', '#008F89', '#690BB2'];
+          const stripeW = 1200 / colors.length;
+          colors.forEach((c, idx) => {
+            ctx.fillStyle = c;
+            ctx.fillRect(idx * stripeW, 0, stripeW, 14);
+          });
+
+          // Bordes y tarjeta interior
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.roundRect(60, 60, 1080, 510, 20);
+          ctx.fill();
+          ctx.stroke();
+
+          // Textos oficiales
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '900 44px Montserrat, sans-serif';
+          ctx.fillText(item.name.replace(/\.[^/.]+$/, ""), 100, 240);
+
+          ctx.font = '700 24px Poppins, sans-serif';
+          ctx.fillStyle = '#FFAAD4';
+          ctx.fillText('GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO', 100, 290);
+
+          ctx.font = '500 20px Poppins, sans-serif';
+          ctx.fillStyle = '#65F0EB';
+          ctx.fillText(`Dirección de Comunicación • ${item.secretaria} • Activo Oficial`, 100, 330);
+        }
+
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = item.name.endsWith('.png') ? item.name : `${item.name}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }, 'image/png');
+        return;
+      }
+
+      // CASO 5: Archivos de texto o metadatos
+      const blob = new Blob([
+        `ACTIVO INSTITUCIONAL GAMEA\nNombre: ${item.name}\nFormato: ${item.format}\nSecretaria: ${item.secretaria}\nFecha: ${item.updated}\nSoberanía Digital: Gobierno Autónomo Municipal de El Alto`
+      ], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = item.name.endsWith('.png') ? item.name : `${item.name}.png`;
+      a.href = url;
+      a.download = item.name.endsWith('.txt') ? item.name : `${item.name}.txt`;
+      document.body.appendChild(a);
       a.click();
-      return;
-    } else {
-      // Documento / PDF / Texto manifiesto
-      content = `# ACTIVO INSTITUCIONAL GAMEA\nNombre: ${item.name}\nFormato: ${item.format}\nSecretaria: ${item.secretaria}\nFecha: ${item.updated}\nSoberanía Digital: Gobierno Autónomo Municipal de El Alto`;
-      mimeType = 'text/plain;charset=utf-8';
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      console.error('Error generando descarga de activo:', err);
+      alert('Ocurrió un error al procesar la descarga. Por favor, reintente.');
+    } finally {
+      setDownloadingId(null);
     }
-
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = item.name;
-    a.click();
-    URL.revokeObjectURL(url);
   };
 
-  // Descargar paquete completo / Manifiesto ZIP
-  const handleDownloadAll = () => {
-    const manifest = {
-      sistema: 'EASystem - Biblioteca Digital de Activos de Marca (BAM)',
-      gobierno: 'Gobierno Autónomo Municipal de El Alto',
-      fechaGeneracion: new Date().toISOString(),
-      totalActivos: assets.length,
-      activos: assets.map(a => ({
-        nombre: a.name,
-        carpeta: a.folder,
-        formato: a.format,
-        tamano: a.size,
-        secretaria: a.secretaria,
-        actualizado: a.updated
-      }))
-    };
-
-    const blob = new Blob([JSON.stringify(manifest, null, 2)], { type: 'application/json;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `EASystem_Manifiesto_BAM_${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+  // Descargar paquete completo en archivo .ZIP real
+  const handleDownloadAll = async () => {
+    try {
+      setIsZipping(true);
+      const zipBlob = await AssetExporterService.generateCompleteZip(assets);
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `EASystem_Pack_Oficial_ElAlto_${new Date().toISOString().split('T')[0]}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      console.error('Error creando archivo ZIP:', err);
+      alert('Error al generar el paquete ZIP. Intente descargar los activos individuales.');
+    } finally {
+      setIsZipping(false);
+    }
   };
+
 
   const filtered = assets.filter(a => {
     const matchesFolder = selectedFolder === 'todos' || a.folder === selectedFolder;
@@ -412,15 +489,16 @@ export const BrandAssetManager: React.FC = () => {
               <span>Subir Mi Material</span>
             </button>
 
-            {/* BOTÓN DESCARGAR TODO FUNCIONAL */}
+            {/* BOTÓN DESCARGAR TODO FUNCIONAL EN ZIP REAL */}
             <button 
               onClick={handleDownloadAll}
+              disabled={isZipping}
               className="ea-btn ea-btn-secondary" 
-              style={{ padding: '10px 18px', fontSize: '0.85rem' }}
-              title="Descarga el listado oficial de todos los archivos y logotipos disponibles"
+              style={{ padding: '10px 18px', fontSize: '0.85rem', opacity: isZipping ? 0.7 : 1 }}
+              title="Descarga el paquete ZIP oficial con todos los archivos y plantillas Word/PDF"
             >
               <Download size={16} />
-              <span>Descargar Listado Completo</span>
+              <span>{isZipping ? 'Generando ZIP Oficial...' : 'Descargar Pack ZIP Oficial'}</span>
             </button>
           </div>
         </div>
