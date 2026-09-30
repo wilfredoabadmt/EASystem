@@ -27,34 +27,304 @@ export const DigitalBrandBook: React.FC = () => {
 
   const activeModule = BRAND_MODULES_16.find(m => m.id === activeModuleId) || BRAND_MODULES_16[0];
 
-  const handleDownloadModule = () => {
-    const filename = `GAMEA_BrandBook_Modulo_${String(activeModule.id).padStart(2, '0')}_${activeModule.title.replace(/\s+/g, '_')}.md`;
-    const content = `# MANUAL DE IMAGEN INSTITUCIONAL — GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO
-## Módulo ${String(activeModule.id).padStart(2, '0')}: ${activeModule.title}
-**Categoría:** ${activeModule.category}
-**Fecha de Emisión:** 2026-09-29
-**Autoridad Emisora:** Dirección de Comunicación Institucional (DIRCOM)
+  const generateEditorialHTML = () => {
+    return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>MÓDULO ${String(activeModule.id).padStart(2, '0')}: ${activeModule.title} — Manual de Imagen Institucional GAMEA</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    @page {
+      size: A4;
+      margin: 12mm 15mm 15mm 15mm;
+    }
 
----
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', -apple-system, sans-serif;
+      margin: 0;
+      padding: 30px 20px;
+      background: #0B0517;
+      color: #1F2937;
+      line-height: 1.6;
+    }
 
-### 1. Resumen Ejecutivo
-${activeModule.desc}
+    .toolbar {
+      position: sticky;
+      top: 10px;
+      max-width: 820px;
+      margin: 0 auto 24px auto;
+      background: #150A2B;
+      border: 1px solid rgba(245, 0, 123, 0.4);
+      color: #FFF;
+      padding: 14px 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justifyContent: space-between;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+      z-index: 100;
+    }
 
-### 2. Normas de Aplicación Obligatoria
-- Este módulo rige de forma inmutable para todas las Secretarías, Direcciones Desconcentradas y Empresas Públicas Municipales.
-- El uso de cualquier versión distorsionada, sombras duras o variantes tipográficas fuera de la norma constituye infracción a la gobernanza visual del GAMEA.
-- Los activos vectoriales oficiales (.SVG) deben obtenerse exclusivamente de la biblioteca digital BAM.
+    .btn-print {
+      background: #F5007B;
+      color: #FFF;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .btn-print:hover { background: #FF1A8C; transform: translateY(-1px); }
 
-### 3. Paleta Cromática Institucional de Soporte
-- Púrpura Alteño: #4B008F
-- Rosa Rebelde: #F5007B
-- Turquesa Integración: #008F89
-- Oro Andino: #F5B400
+    .document-page {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 16px;
+      padding: 48px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      position: relative;
+    }
 
----
-*Documento emitido bajo el sistema EASystem v1.0.0 — Soberanía Digital y Gobierno Abierto.*`;
+    .aguayo-bar {
+      height: 8px;
+      width: 100%;
+      background: linear-gradient(90deg, #4B008F 0%, #F5007B 25%, #F5B400 50%, #008F89 75%, #690BB2 100%);
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
 
-    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+    .header-table {
+      width: 100%;
+      border-bottom: 2px solid #4B008F;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justifyContent: space-between;
+    }
+
+    .doc-meta {
+      font-size: 11px;
+      color: #6B7280;
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    .doc-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: #4B008F;
+      margin: 6px 0;
+    }
+
+    .doc-category {
+      display: inline-block;
+      background: #F3E8FF;
+      color: #6B21A8;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: #111827;
+      border-left: 4px solid #F5007B;
+      padding-left: 12px;
+      margin: 22px 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .color-swatch {
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 10.5px;
+    }
+
+    .swatch-color { height: 45px; width: 100%; }
+    .swatch-info { padding: 8px; background: #FAFAFA; }
+    .swatch-name { font-weight: 700; color: #111; }
+    .swatch-hex { font-family: monospace; color: #6B21A8; font-weight: 700; font-size: 11px; }
+
+    .rule-box {
+      background: #F9FAFB;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      font-size: 13px;
+    }
+
+    .footer {
+      margin-top: 36px;
+      padding-top: 14px;
+      border-top: 1px solid #E5E7EB;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10.5px;
+      color: #9CA3AF;
+    }
+
+    @media print {
+      body { background: #FFF !important; padding: 0 !important; }
+      .toolbar { display: none !important; }
+      .document-page { border: none !important; box-shadow: none !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="background: #4B008F; padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 12px;">GAMEA</span>
+      <div style="font-size: 13px; font-weight: 600;">
+        Ficha Técnica Oficial · Módulo ${String(activeModule.id).padStart(2, '0')}: ${activeModule.title}
+      </div>
+    </div>
+    <button class="btn-print" onclick="window.print()">
+      🖨 Guardar en PDF / Imprimir Ficha
+    </button>
+  </div>
+
+  <div class="document-page">
+    <div class="aguayo-bar"></div>
+
+    <div class="header-table">
+      <div>
+        <span class="doc-category">MÓDULO ${String(activeModule.id).padStart(2, '0')} — ${activeModule.category}</span>
+        <h1 class="doc-title">${activeModule.title}</h1>
+        <div style="font-size: 13px; color: #4B5563; font-weight: 600;">
+          Gobierno Autónomo Municipal de El Alto · Dirección de Comunicación (DIRCOM)
+        </div>
+      </div>
+      <div class="doc-meta">
+        <div><strong>FICHA TÉCNICA OFICIAL</strong></div>
+        <div>Código: FT-GAMEA-${String(activeModule.id).padStart(2, '0')}-2026</div>
+        <div>Vigencia: Gestión 2026</div>
+      </div>
+    </div>
+
+    <div class="section-title">1. Resumen y Objeto de la Especificación</div>
+    <p style="font-size: 13.5px; color: #374151; margin: 4px 0 16px 0;">
+      ${activeModule.desc}
+    </p>
+
+    <div class="section-title">2. Normas de Aplicación Innegociables</div>
+    <div class="rule-box">
+      <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+        <li><strong>Soberanía Visual:</strong> Este módulo rige de forma inmutable para todas las Secretarías, Direcciones Desconcentradas y Empresas Públicas Municipales de El Alto.</li>
+        <li><strong>Prohibición de Alteración:</strong> Queda terminantemente prohibido estirar, deformar o alterar los colores de la marca institucional.</li>
+        <li><strong>Fuente de Activos:</strong> Los archivos vectoriales maestros oficiales (.SVG) deben descargarse exclusivamente desde el sistema digital EASystem (Biblioteca BAM).</li>
+        <li><strong>Supervisión DIRCOM:</strong> Cualquier aplicación especial o no contemplada en este documento debe remitirse para dictamen técnico formal de la Dirección de Comunicación Institucional.</li>
+      </ul>
+    </div>
+
+    <div class="section-title">3. Códigos Cromáticos Oficiales</div>
+    <div class="palette-grid">
+      <div class="color-swatch">
+        <div class="swatch-color" style="background: #4B008F;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Púrpura Alteño</div>
+          <div class="swatch-hex">HEX #4B008F</div>
+          <div>RGB 75, 0, 143</div>
+          <div>Pantone 2685 C</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-color" style="background: #F5007B;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Rosa Rebelde</div>
+          <div class="swatch-hex">HEX #F5007B</div>
+          <div>RGB 245, 0, 123</div>
+          <div>Pantone 219 C</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-color" style="background: #008F89;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Turquesa Futuro</div>
+          <div class="swatch-hex">HEX #008F89</div>
+          <div>RGB 0, 143, 137</div>
+          <div>Pantone 7716 C</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-color" style="background: #F5B400;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Oro Andino</div>
+          <div class="swatch-hex">HEX #F5B400</div>
+          <div>RGB 245, 180, 0</div>
+          <div>Pantone 1235 C</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">4. Certificación y Trazabilidad Municipal</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #FAF5FF; border: 1px solid #E9D5FF; padding: 14px 20px; border-radius: 10px; margin-top: 10px;">
+      <div>
+        <div style="font-weight: 800; font-size: 13px; color: #6B21A8;">CERTIFICACIÓN DIGITAL DE MARCA — GAMEA</div>
+        <div style="font-size: 11px; color: #6B7280; margin-top: 2px;">
+          Ficha oficial emitida bajo el estándar cívico EASystem v1.0.0. Válido ante auditoría de gestión pública.
+        </div>
+      </div>
+      <div style="text-align: right; font-size: 10.5px; color: #4B008F; font-family: monospace; font-weight: 700;">
+        [ SELLO DIGITAL DIRCOM ]<br />EL ALTO DE PIE
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>© 2026 Gobierno Autónomo Municipal de El Alto · Jach'a Uta</div>
+      <div>"El Corazón de la Metrópoli"</div>
+    </div>
+  </div>
+
+</body>
+</html>`;
+  };
+
+  // Abrir ventana directa lista para Imprimir / Guardar en PDF A4
+  const handleOpenPrintPreview = () => {
+    const html = generateEditorialHTML();
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.open();
+      printWindow.document.write(html);
+      printWindow.document.close();
+    }
+  };
+
+  // Descargar archivo editorial HTML de alta fidelidad
+  const handleDownloadEditorialHTML = () => {
+    const filename = `Ficha_Oficial_GAMEA_Modulo_${String(activeModule.id).padStart(2, '0')}_${activeModule.title.replace(/\s+/g, '_')}.html`;
+    const blob = new Blob([generateEditorialHTML()], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -110,8 +380,8 @@ ${activeModule.desc}
 
       {/* Main Content Area */}
       <div className="ea-card" style={{ padding: '36px' }}>
-        {/* Module Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px', paddingBottom: '20px', borderBottom: '1px solid var(--ea-border)' }}>
+        {/* Module Header con opciones de Ficha Oficial / PDF */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px', paddingBottom: '20px', borderBottom: '1px solid var(--ea-border)', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div className="ea-badge ea-badge-teal" style={{ marginBottom: '8px' }}>
               Módulo {String(activeModule.id).padStart(2, '0')} — {activeModule.category}
@@ -120,15 +390,26 @@ ${activeModule.desc}
             <p style={{ color: 'var(--ea-text-muted)', marginTop: '4px' }}>{activeModule.desc}</p>
           </div>
 
-          <button 
-            onClick={handleDownloadModule}
-            className="ea-btn ea-btn-secondary" 
-            style={{ padding: '10px 20px', fontSize: '0.85rem' }}
-            title="Descargar especificación de este módulo"
-          >
-            <Download size={16} />
-            <span>Descargar Módulo (Norma Oficial)</span>
-          </button>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <button 
+              onClick={handleOpenPrintPreview}
+              className="ea-btn ea-btn-primary" 
+              style={{ padding: '10px 18px', fontSize: '0.85rem' }}
+              title="Abre la Ficha Técnica Editorial para Imprimir o Guardar en PDF A4"
+            >
+              <span>🖨 Imprimir / Guardar en PDF</span>
+            </button>
+
+            <button 
+              onClick={handleDownloadEditorialHTML}
+              className="ea-btn ea-btn-secondary" 
+              style={{ padding: '10px 18px', fontSize: '0.85rem' }}
+              title="Descargar Ficha Editorial completa en formato HTML"
+            >
+              <Download size={16} />
+              <span>Descargar Ficha Oficial</span>
+            </button>
+          </div>
         </div>
 
         {/* Dynamic Sandbox Depending on Module */}
