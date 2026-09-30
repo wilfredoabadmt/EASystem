@@ -330,7 +330,7 @@ export const BrandAssetManager: React.FC = () => {
   });
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '32px' }}>
+    <div className="ea-grid-bam">
       {/* Folder Tree Sidebar */}
       <div className="ea-card" style={{ padding: '20px', height: 'fit-content' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>

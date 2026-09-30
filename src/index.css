@@ -183,3 +183,195 @@ h1, h2, h3, h4, .ea-title {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--ea-secondary);
 }
+
+/* =============================================================================
+   RESPONSIVE DESIGN SYSTEM (TABLETS, MÓVILES Y PANTALLAS TÁCTILES)
+   ============================================================================= */
+
+/* Main Header App Layout */
+.ea-app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 28px;
+  border-bottom: 1px solid var(--ea-border);
+  background: rgba(9, 3, 20, 0.94);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.ea-header-mobile-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.ea-header-nav-scroll {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  ms-overflow-style: none;
+  padding: 4px 0;
+}
+.ea-header-nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.ea-header-user-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+/* Main Workspace */
+.ea-main-container {
+  flex: 1;
+  padding: 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Grids Responsivos Maestros */
+.ea-grid-editor {
+  display: grid;
+  grid-template-columns: minmax(420px, 480px) 1fr;
+  gap: 32px;
+  min-height: 80vh;
+  align-items: start;
+}
+
+.ea-grid-brandbook {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 32px;
+  min-height: 80vh;
+}
+
+.ea-grid-assistant {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 28px;
+  min-height: 80vh;
+}
+
+.ea-grid-validator {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 32px;
+}
+
+.ea-grid-bam {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 32px;
+}
+
+.ea-grid-architecture {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.ea-grid-dashboard {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+/* Canvas y Contenedores Gráficos */
+.ea-canvas-responsive {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* =============================================================================
+   TABLETS & PANTALLAS MEDIANAS (<= 1024px)
+   ============================================================================= */
+@media (max-width: 1024px) {
+  .ea-app-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .ea-header-mobile-bar {
+    width: 100%;
+  }
+
+  .ea-header-nav-scroll {
+    width: 100%;
+    padding-bottom: 4px;
+  }
+
+  .ea-main-container {
+    padding: 20px 14px;
+  }
+
+  /* Colapsar grids de 2 columnas a 1 columna */
+  .ea-grid-editor,
+  .ea-grid-brandbook,
+  .ea-grid-assistant,
+  .ea-grid-validator,
+  .ea-grid-bam,
+  .ea-grid-architecture,
+  .ea-grid-dashboard {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+/* =============================================================================
+   MÓVILES & CELULARES (<= 768px)
+   ============================================================================= */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .ea-main-container {
+    padding: 14px 10px;
+  }
+
+  .ea-card {
+    padding: 18px 14px !important;
+    border-radius: 12px;
+  }
+
+  /* Títulos más compactos en móvil */
+  h1 { font-size: 1.6rem !important; }
+  h2 { font-size: 1.35rem !important; }
+  h3 { font-size: 1.15rem !important; }
+
+  /* Canvas visual adaptable en celulares */
+  .ea-canvas-responsive {
+    width: 100% !important;
+    min-height: auto !important;
+    border-radius: 8px !important;
+  }
+
+  /* Botones táctiles */
+  .ea-btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    min-height: 42px;
+  }
+
+  /* Inputs táctiles amigables */
+  input, select, textarea {
+    font-size: 15px !important;
+    padding: 10px 12px !important;
+  }
+}
+

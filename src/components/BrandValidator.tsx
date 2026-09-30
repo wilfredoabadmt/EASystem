@@ -205,7 +205,7 @@ export const BrandValidator: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '420px 1fr', gap: '32px' }}>
+    <div className="ea-grid-validator">
       {/* Upload & Controls */}
       <div className="ea-card" style={{ padding: '32px' }}>
         <div className="ea-badge ea-badge-teal" style={{ marginBottom: '12px' }}>

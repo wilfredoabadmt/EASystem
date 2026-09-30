@@ -357,7 +357,7 @@ ${pointsList.map(pt => `    <li style="margin-bottom: 8px;">${pt}</li>`).join('\
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(420px, 480px) 1fr', gap: '32px', minHeight: '80vh', alignItems: 'start' }}>
+    <div className="ea-grid-editor">
       {/* Editor Controls */}
       <div className="ea-card" style={{ padding: '28px', height: 'fit-content' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
@@ -1469,8 +1469,10 @@ ${pointsList.map(pt => `    <li style="margin-bottom: 8px;">${pt}</li>`).join('\
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
             <div 
               ref={canvasRef}
+              className="ea-canvas-responsive"
               style={{
-                width: format === 'POST_INSTAGRAM' ? '460px' : format === 'STORY_INSTAGRAM' ? '320px' : '500px',
+                width: '100%',
+                maxWidth: format === 'POST_INSTAGRAM' ? '460px' : format === 'STORY_INSTAGRAM' ? '320px' : '500px',
                 minHeight: format === 'POST_INSTAGRAM' ? '460px' : format === 'STORY_INSTAGRAM' ? '560px' : '650px',
                 background: '#FFFFFF',
                 color: '#150A2B',

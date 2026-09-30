@@ -184,7 +184,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
       </div>
 
       {/* Charts & Activity */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+      <div className="ea-grid-dashboard">
         {/* Uso por Secretaría */}
         <div className="ea-card" style={{ padding: '28px' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '20px' }}>

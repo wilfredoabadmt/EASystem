@@ -91,7 +91,7 @@ export const AltoIAAssistant: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '360px 1fr', gap: '28px', minHeight: '80vh' }}>
+    <div className="ea-grid-assistant">
       
       {/* Panel Izquierdo: Prompts Rápidos y Lineamientos Institucionales */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>

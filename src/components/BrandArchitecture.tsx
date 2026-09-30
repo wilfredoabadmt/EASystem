@@ -202,7 +202,7 @@ export const BrandArchitecture: React.FC = () => {
       </div>
 
       {/* Generador de Submarcas y Previsualizador */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+      <div className="ea-grid-architecture">
         {/* Generador de Submarcas */}
         <div className="ea-card" style={{ padding: '32px' }}>
           <h3 style={{ fontSize: '1.3rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>

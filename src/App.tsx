@@ -77,37 +77,37 @@ export const App: React.FC = () => {
       <div className="ea-mesh-bg" />
       <div className="ea-aguayo-bar" />
 
-      {/* Top Header App */}
-      <header style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '12px 24px',
-        borderBottom: '1px solid var(--ea-border)',
-        background: 'rgba(9, 3, 20, 0.9)',
-        backdropFilter: 'blur(20px)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        gap: '16px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0 }}>
-          <BrandLogo size={36} subbrand="Gestión de Marca" allowUpload={true} />
-          <span className="ea-badge ea-badge-purple" style={{ fontSize: '0.7rem' }}>
-            {currentUser.secretaria}
-          </span>
+      {/* Top Header App - Responsive 2-Tier on Mobile/Tablet */}
+      <header className="ea-app-header">
+        {/* Tier 1: Logo & User Status Bar on Mobile */}
+        <div className="ea-header-mobile-bar">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <BrandLogo size={34} subbrand="Gestión de Marca" allowUpload={true} />
+            <span className="ea-badge ea-badge-purple" style={{ fontSize: '0.68rem', display: 'none' /* Oculto en móvil muy pequeño */ }}>
+              {currentUser.secretaria}
+            </span>
+          </div>
+
+          {/* User Profile & Exit (Visible en móvil en barra superior) */}
+          <div className="ea-header-user-row">
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700 }}>{currentUser.name}</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--ea-secondary)' }}>{currentUser.role}</div>
+            </div>
+
+            <button 
+              onClick={handleLogout}
+              title="Cerrar sesión"
+              className="ea-btn ea-btn-secondary"
+              style={{ padding: '7px 10px', minHeight: '36px' }}
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
         </div>
 
-        {/* Navigation Tabs - Alineación en una Sola Fila */}
-        <div style={{ 
-          display: 'flex', 
-          gap: '6px', 
-          flexWrap: 'nowrap', 
-          alignItems: 'center',
-          overflowX: 'auto',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
-        }}>
+        {/* Tier 2: Scrollable Navigation Tabs Bar */}
+        <nav className="ea-header-nav-scroll" aria-label="Navegación Principal">
           {[
             { id: 'DASHBOARD', label: 'Inicio', title: 'Panel Principal de Control', icon: LayoutDashboard, color: '#A78BFA' },
             { id: 'LINEA_GRAFICA', label: 'Línea Gráfica', title: 'Línea Gráfica & Materiales Oficiales', icon: Palette, badge: 'Oficial', color: '#F43F5E' },
@@ -129,14 +129,15 @@ export const App: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  padding: '6px 10px',
+                  padding: '6px 11px',
                   borderRadius: '9px',
                   border: isActive ? `1.5px solid ${tab.color}` : '1px solid rgba(255, 255, 255, 0.08)',
                   background: isActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.02)',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                   flexShrink: 0,
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
+                  minHeight: '38px'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)';
@@ -189,28 +190,11 @@ export const App: React.FC = () => {
               </button>
             );
           })}
-        </div>
-
-        {/* User Profile & Exit */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>{currentUser.name}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--ea-secondary)' }}>{currentUser.role}</div>
-          </div>
-
-          <button 
-            onClick={handleLogout}
-            title="Cerrar sesión"
-            className="ea-btn ea-btn-secondary"
-            style={{ padding: '8px 12px' }}
-          >
-            <LogOut size={16} />
-          </button>
-        </div>
+        </nav>
       </header>
 
-      {/* Main Workspace Body */}
-      <main style={{ flex: 1, padding: '36px', maxWidth: '1600px', margin: '0 auto', width: '100%' }}>
+      {/* Main Workspace Body Responsivo */}
+      <main className="ea-main-container">
         {currentTab === 'DASHBOARD' && <Dashboard user={currentUser} onNavigate={setCurrentTab} />}
         {currentTab === 'LINEA_GRAFICA' && <LineaGraficaManager userRole={currentUser.role} />}
         {currentTab === 'BRAND_BOOK' && <DigitalBrandBook onNavigateTab={(t) => setCurrentTab(t as any)} />}

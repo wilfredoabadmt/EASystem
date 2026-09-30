@@ -369,7 +369,7 @@ export const DigitalBrandBook: React.FC<DigitalBrandBookProps> = ({ onNavigateTa
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '32px', minHeight: '80vh' }}>
+    <div className="ea-grid-brandbook">
       {/* Sidebar de los 16 módulos */}
       <div className="ea-card" style={{ padding: '20px', height: 'fit-content' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', paddingBottom: '12px', borderBottom: '1px solid var(--ea-border)' }}>
