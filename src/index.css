@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --ea-primary: #4B008F;
+  --ea-primary-rgb: 75, 0, 143;
+  --ea-secondary: #F5007B;
+  --ea-secondary-rgb: 245, 0, 123;
+  --ea-teal: #008F89;
+  --ea-teal-rgb: 0, 143, 137;
+  --ea-gold: #F5B400;
+  --ea-gold-rgb: 245, 180, 0;
+  --ea-purple-deep: #690BB2;
+
+  --ea-bg: #090314;
+  --ea-bg-card: rgba(26, 13, 49, 0.7);
+  --ea-bg-card-hover: rgba(36, 18, 68, 0.85);
+  --ea-border: rgba(255, 255, 255, 0.1);
+  --ea-border-active: rgba(245, 0, 123, 0.4);
+  
+  --ea-text: #FFFFFF;
+  --ea-text-muted: #B3A5C8;
+  
+  --ea-font-title: 'Montserrat', sans-serif;
+  --ea-font-body: 'Poppins', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--ea-font-body);
+  background-color: var(--ea-bg);
+  color: var(--ea-text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Background Gradients & Mesh */
+.ea-mesh-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(75, 0, 143, 0.35) 0%, transparent 40%),
+    radial-gradient(circle at 90% 15%, rgba(245, 0, 123, 0.25) 0%, transparent 35%),
+    radial-gradient(circle at 50% 85%, rgba(0, 143, 137, 0.2) 0%, transparent 45%),
+    #080211;
+  pointer-events: none;
+}
+
+/* Typography Helpers */
+h1, h2, h3, h4, .ea-title {
+  font-family: var(--ea-font-title);
+  letter-spacing: -0.02em;
+}
+
+/* Glassmorphism Cards */
+.ea-card {
+  background: var(--ea-bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--ea-border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ea-card:hover {
+  border-color: var(--ea-border-active);
+  box-shadow: 0 12px 30px rgba(75, 0, 143, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Buttons */
+.ea-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--ea-font-title);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.ea-btn-primary {
+  background: linear-gradient(135deg, var(--ea-primary) 0%, var(--ea-secondary) 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 20px rgba(245, 0, 123, 0.35);
+}
+
+.ea-btn-primary:hover {
+  box-shadow: 0 6px 28px rgba(245, 0, 123, 0.55);
+  transform: translateY(-2px);
+}
+
+.ea-btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ea-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--ea-teal);
+  color: var(--ea-teal);
+}
+
+.ea-btn-teal {
+  background: var(--ea-teal);
+  color: #FFFFFF;
+  box-shadow: 0 4px 15px rgba(0, 143, 137, 0.3);
+}
+
+/* Badges */
+.ea-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ea-badge-purple {
+  background: rgba(75, 0, 143, 0.3);
+  color: #D3A4FF;
+  border: 1px solid rgba(75, 0, 143, 0.5);
+}
+
+.ea-badge-pink {
+  background: rgba(245, 0, 123, 0.2);
+  color: #FFA3CF;
+  border: 1px solid rgba(245, 0, 123, 0.4);
+}
+
+.ea-badge-teal {
+  background: rgba(0, 143, 137, 0.2);
+  color: #65F0EB;
+  border: 1px solid rgba(0, 143, 137, 0.4);
+}
+
+/* Aguayo Pattern Bar */
+.ea-aguayo-bar {
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(
+    90deg, 
+    var(--ea-primary) 0%, 
+    var(--ea-secondary) 25%, 
+    var(--ea-gold) 50%, 
+    var(--ea-teal) 75%, 
+    var(--ea-purple-deep) 100%
+  );
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ea-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ea-secondary);
+}

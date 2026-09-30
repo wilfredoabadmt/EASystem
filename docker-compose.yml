@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  easystem-postgres:
+    image: postgres:16-alpine
+    container_name: easystem-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-easystem}
+      POSTGRES_USER: ${POSTGRES_USER:-easystem_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-easystem_secure_pass_2026}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - easystem-pgdata:/var/lib/postgresql/data
+      - ./scripts/init-postgresql.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-easystem_user} -d ${POSTGRES_DB:-easystem}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  easystem-pgdata:
+    name: easystem_pgdata
