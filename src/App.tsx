@@ -82,50 +82,61 @@ export const App: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '16px 36px',
+        padding: '12px 24px',
         borderBottom: '1px solid var(--ea-border)',
         background: 'rgba(9, 3, 20, 0.9)',
         backdropFilter: 'blur(20px)',
         position: 'sticky',
         top: 0,
-        zIndex: 50
+        zIndex: 50,
+        gap: '16px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexShrink: 0 }}>
           <BrandLogo size={36} subbrand="Gestión de Marca" allowUpload={true} />
           <span className="ea-badge ea-badge-purple" style={{ fontSize: '0.7rem' }}>
             {currentUser.secretaria}
           </span>
         </div>
 
-        {/* Navigation Tabs */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+        {/* Navigation Tabs - Alineación en una Sola Fila */}
+        <div style={{ 
+          display: 'flex', 
+          gap: '6px', 
+          flexWrap: 'nowrap', 
+          alignItems: 'center',
+          overflowX: 'auto',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}>
           {[
-            { id: 'DASHBOARD', label: 'Panel Principal', icon: LayoutDashboard, color: '#A78BFA' },
-            { id: 'LINEA_GRAFICA', label: 'Línea Gráfica & Materiales', icon: Palette, badge: 'Oficial', color: '#F43F5E' },
-            { id: 'BRAND_BOOK', label: 'Manual de Marca Digital', icon: BookOpen, color: '#38BDF8' },
-            { id: 'ARCHITECTURE', label: 'Jerarquía de Marca', icon: Boxes, color: '#C084FC' },
-            { id: 'GENERATOR', label: 'Generador de Piezas', icon: Newspaper, color: '#34D399' },
-            { id: 'VALIDATOR', label: 'Validador de Diseños', icon: ShieldCheck, color: '#FBBF24' },
-            { id: 'BAM', label: 'Biblioteca de Archivos', icon: FolderOpen, color: '#FB923C' },
-            { id: 'ALTO_IA', label: 'Asistente Alto IA', icon: Sparkles, color: '#EC4899' },
+            { id: 'DASHBOARD', label: 'Inicio', title: 'Panel Principal de Control', icon: LayoutDashboard, color: '#A78BFA' },
+            { id: 'LINEA_GRAFICA', label: 'Línea Gráfica', title: 'Línea Gráfica & Materiales Oficiales', icon: Palette, badge: 'Oficial', color: '#F43F5E' },
+            { id: 'BRAND_BOOK', label: 'Brand Book', title: 'Manual de Marca Digital', icon: BookOpen, color: '#38BDF8' },
+            { id: 'ARCHITECTURE', label: 'Jerarquía', title: 'Jerarquía y Estructura Organizacional', icon: Boxes, color: '#C084FC' },
+            { id: 'GENERATOR', label: 'Generador', title: 'Generador de Comunicados y Prensa', icon: Newspaper, color: '#34D399' },
+            { id: 'VALIDATOR', label: 'Validador', title: 'Validador de Diseños Oficiales', icon: ShieldCheck, color: '#FBBF24' },
+            { id: 'BAM', label: 'Biblioteca', title: 'Biblioteca de Archivos y Recursos', icon: FolderOpen, color: '#FB923C' },
+            { id: 'ALTO_IA', label: 'Alto IA', title: 'Asistente Inteligente Alto IA', icon: Sparkles, color: '#EC4899' },
           ].map(tab => {
             const isActive = currentTab === tab.id;
             const TabIcon = tab.icon;
             return (
               <button
                 key={tab.id}
+                title={tab.title}
                 onClick={() => setCurrentTab(tab.id as TabType)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '10px',
-                  padding: '7px 12px',
-                  borderRadius: '10px',
+                  gap: '8px',
+                  padding: '6px 10px',
+                  borderRadius: '9px',
                   border: isActive ? `1.5px solid ${tab.color}` : '1px solid rgba(255, 255, 255, 0.08)',
                   background: isActive ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.02)',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  position: 'relative'
+                  transition: 'all 0.15s ease',
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)';
@@ -134,43 +145,42 @@ export const App: React.FC = () => {
                   if (!isActive) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
                 }}
               >
-                {/* Contenedor de Ícono de Alto Impacto Visual */}
+                {/* Contenedor de Ícono */}
                 <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '8px',
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '7px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   background: isActive ? tab.color : 'rgba(255, 255, 255, 0.08)',
                   color: isActive ? '#FFFFFF' : tab.color,
-                  boxShadow: isActive ? `0 0 14px ${tab.color}99` : 'none',
-                  transition: 'all 0.2s ease',
+                  boxShadow: isActive ? `0 0 12px ${tab.color}99` : 'none',
+                  transition: 'all 0.15s ease',
                   flexShrink: 0
                 }}>
-                  <TabIcon size={20} strokeWidth={2.3} />
+                  <TabIcon size={18} strokeWidth={2.3} />
                 </div>
 
                 {/* Texto del Tab */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                   <span style={{
                     color: isActive ? '#FFFFFF' : '#E5E7EB',
                     fontWeight: isActive ? 800 : 600,
-                    fontSize: '0.82rem',
-                    letterSpacing: '-0.01em',
-                    whiteSpace: 'nowrap'
+                    fontSize: '0.8rem',
+                    letterSpacing: '-0.01em'
                   }}>
                     {tab.label}
                   </span>
                   {(tab as any).badge && (
                     <span style={{
-                      fontSize: '0.62rem',
-                      padding: '2px 6px',
+                      fontSize: '0.58rem',
+                      padding: '1px 5px',
                       borderRadius: '4px',
                       background: 'var(--ea-teal)',
                       color: '#FFFFFF',
                       fontWeight: 800,
-                      boxShadow: '0 0 8px rgba(0, 143, 137, 0.6)'
+                      boxShadow: '0 0 6px rgba(0, 143, 137, 0.6)'
                     }}>
                       {(tab as any).badge}
                     </span>
