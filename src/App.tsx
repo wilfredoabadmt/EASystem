@@ -14,7 +14,10 @@ import {
   Palette,
   Boxes,
   Newspaper,
-  FolderOpen
+  FolderOpen,
+  Menu,
+  X,
+  ChevronRight
 } from 'lucide-react';
 import { BrandLogo } from './components/BrandLogo';
 import { LandingPage } from './components/LandingPage';
@@ -36,6 +39,7 @@ export const App: React.FC = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [currentUser, setCurrentUser] = useState<UserProfile>(PRESET_USERS.DIRECTOR_COMUNICACION);
   const [currentTab, setCurrentTab] = useState<TabType>('DASHBOARD');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleEnterManager = () => {
     setShowLogin(true);
@@ -88,9 +92,9 @@ export const App: React.FC = () => {
             </span>
           </div>
 
-          {/* User Profile & Exit (Visible en móvil en barra superior) */}
+          {/* User Profile & Exit & Mobile Menu Toggle */}
           <div className="ea-header-user-row">
-            <div style={{ textAlign: 'right' }}>
+            <div className="ea-header-user-details" style={{ textAlign: 'right' }}>
               <div style={{ fontSize: '0.82rem', fontWeight: 700 }}>{currentUser.name}</div>
               <div style={{ fontSize: '0.72rem', color: 'var(--ea-secondary)' }}>{currentUser.role}</div>
             </div>
@@ -102,6 +106,16 @@ export const App: React.FC = () => {
               style={{ padding: '7px 10px', minHeight: '36px' }}
             >
               <LogOut size={16} />
+            </button>
+
+            {/* Botón de Menú para tablets y móviles */}
+            <button 
+              className="ea-app-menu-btn"
+              onClick={() => setMobileMenuOpen(true)}
+              title="Ver todos los módulos"
+            >
+              <Menu size={18} />
+              <span>Menú</span>
             </button>
           </div>
         </div>
@@ -192,6 +206,135 @@ export const App: React.FC = () => {
           })}
         </nav>
       </header>
+
+      {/* Drawer Completo de Navegación para Móviles y Tablets */}
+      {mobileMenuOpen && (
+        <div 
+          className="ea-app-drawer-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <div 
+            className="ea-app-drawer-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="ea-app-drawer-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <BrandLogo size={28} />
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '0.92rem' }}>Módulos del Sistema</div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--ea-text-muted)' }}>GAMEA — Dirección de Comunicación</div>
+                </div>
+              </div>
+              <button 
+                onClick={() => setMobileMenuOpen(false)}
+                className="ea-btn ea-btn-secondary"
+                style={{ padding: '6px 8px' }}
+                aria-label="Cerrar menú"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Perfil del Usuario dentro del Drawer */}
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '12px',
+              padding: '12px 14px',
+              margin: '14px 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>{currentUser.name}</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--ea-secondary)', fontWeight: 600 }}>{currentUser.role}</div>
+                <div style={{ fontSize: '0.68rem', color: 'var(--ea-text-muted)', marginTop: '2px' }}>{currentUser.secretaria}</div>
+              </div>
+              <button 
+                onClick={() => { setMobileMenuOpen(false); handleLogout(); }}
+                className="ea-btn ea-btn-secondary"
+                style={{ padding: '6px 10px', fontSize: '0.75rem', gap: '6px' }}
+              >
+                <LogOut size={14} />
+                <span>Salir</span>
+              </button>
+            </div>
+
+            {/* Lista completa de los 8 módulos con descripción */}
+            <div className="ea-app-drawer-list">
+              {[
+                { id: 'DASHBOARD', label: 'Inicio', title: 'Panel Principal de Control', desc: 'Métricas institucionales y salud de marca', icon: LayoutDashboard, color: '#A78BFA' },
+                { id: 'LINEA_GRAFICA', label: 'Línea Gráfica', title: 'Línea Gráfica & Materiales', desc: 'Paletas oficiales, tipografías y 8 kits', icon: Palette, badge: 'Oficial', color: '#F43F5E' },
+                { id: 'BRAND_BOOK', label: 'Brand Book', title: 'Manual de Marca Digital', desc: 'Retícula 2X, normativas y arquitectura', icon: BookOpen, color: '#38BDF8' },
+                { id: 'ARCHITECTURE', label: 'Jerarquía', title: 'Estructura Organizacional', desc: 'Organigrama y submunicipios del GAMEA', icon: Boxes, color: '#C084FC' },
+                { id: 'GENERATOR', label: 'Generador', title: 'Generador de Comunicados y Prensa', desc: 'Noticias WordPress, comunicados con QR y afiches', icon: Newspaper, color: '#34D399' },
+                { id: 'VALIDATOR', label: 'Validador', title: 'Auditoría con IA', desc: 'Validación geométrica y Brand Score oficial', icon: ShieldCheck, color: '#FBBF24' },
+                { id: 'BAM', label: 'Biblioteca', title: 'Biblioteca de Archivos', desc: 'Vectores SVG, manuales, plantillas y recursos', icon: FolderOpen, color: '#FB923C' },
+                { id: 'ALTO_IA', label: 'Alto IA', title: 'Asistente Inteligente', desc: 'Generación de copys con IA y consultoría', icon: Sparkles, color: '#EC4899' },
+              ].map(tab => {
+                const isActive = currentTab === tab.id;
+                const TabIcon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => {
+                      setCurrentTab(tab.id as TabType);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`ea-app-drawer-item ${isActive ? 'active' : ''}`}
+                    style={{
+                      borderColor: isActive ? tab.color : 'rgba(255, 255, 255, 0.08)',
+                      background: isActive ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.02)'
+                    }}
+                  >
+                    <div style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: isActive ? tab.color : 'rgba(255, 255, 255, 0.08)',
+                      color: isActive ? '#FFFFFF' : tab.color,
+                      boxShadow: isActive ? `0 0 12px ${tab.color}99` : 'none',
+                      flexShrink: 0
+                    }}>
+                      <TabIcon size={20} strokeWidth={2.3} />
+                    </div>
+
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 800, fontSize: '0.92rem', color: isActive ? '#FFFFFF' : '#E5E7EB' }}>
+                          {tab.label}
+                        </span>
+                        {(tab as any).badge && (
+                          <span style={{
+                            fontSize: '0.62rem',
+                            padding: '1px 6px',
+                            borderRadius: '4px',
+                            background: 'var(--ea-teal)',
+                            color: '#FFFFFF',
+                            fontWeight: 800
+                          }}>
+                            {(tab as any).badge}
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--ea-text-muted)', marginTop: '2px', lineHeight: 1.3 }}>
+                        {tab.desc}
+                      </div>
+                    </div>
+
+                    <ChevronRight size={18} color={isActive ? tab.color : 'var(--ea-text-muted)'} />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* Main Workspace Body Responsivo */}
       <main className="ea-main-container">
