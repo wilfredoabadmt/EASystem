@@ -77,7 +77,57 @@ export const MaterialesPersonalAdaptados: React.FC<Props> = ({
   };
 
   const handleDownload = (materialNombre: string) => {
-    alert(`Generando y descargando: ${materialNombre}\nAdaptado bajo la norma activa: ${lineaActiva.nombre}\nSecretaría: ${currentSec.nombre}`);
+    // Generar documento SVG / HTML imprimible real con la línea gráfica activa y datos de secretaría
+    const sanitizedName = materialNombre.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filename = `${sanitizedName}_${currentSec.codigo}_${lineaActiva.codigo}.html`;
+    
+    const fileHtml = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>${materialNombre} - ${currentSec.nombre} - GAMEA</title>
+  <style>
+    body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 40px; background: #0B0517; color: #FFF; }
+    .card { max-width: 600px; margin: 0 auto; border: 2px solid ${lineaActiva.colorPrimary}; border-radius: 16px; padding: 32px; background: #150A2B; }
+    .aguayo { height: 8px; width: 100%; display: flex; margin-bottom: 24px; border-radius: 4px; overflow: hidden; }
+    .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; margin-bottom: 20px; }
+    .title { font-size: 20px; font-weight: 800; color: ${lineaActiva.colorSecondary}; }
+    .sec { font-size: 14px; color: ${lineaActiva.colorTeal}; font-weight: 600; }
+    .meta { font-size: 12px; color: #9CA3AF; margin-top: 16px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="aguayo">
+      <div style="flex:1;background:${lineaActiva.colorPrimary}"></div>
+      <div style="flex:1;background:${lineaActiva.colorSecondary}"></div>
+      <div style="flex:1;background:${lineaActiva.colorGold}"></div>
+      <div style="flex:1;background:${lineaActiva.colorTeal}"></div>
+    </div>
+    <div class="header">
+      <div>
+        <div class="title">${materialNombre}</div>
+        <div class="sec">${currentSec.nombre} (${currentSec.codigo})</div>
+      </div>
+      <div>${lineaActiva.logoSvg}</div>
+    </div>
+    <div class="meta">
+      <p><strong>Línea Maestra Aplicada:</strong> ${lineaActiva.nombre} (${lineaActiva.codigo})</p>
+      <p><strong>Funcionario Asignado:</strong> ${currentFunc?.nombreCompleto || 'Personal Municipal'} (${currentFunc?.cargo || 'Funcionario'})</p>
+      <p><strong>Slogan:</strong> "${lineaActiva.slogan}"</p>
+      <p><strong>Certificación:</strong> Pieza autorizada por la Dirección de Comunicación (DIRCOM) - GAMEA.</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    const blob = new Blob([fileHtml], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handlePrint = () => {

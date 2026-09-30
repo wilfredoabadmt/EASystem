@@ -750,13 +750,43 @@ export const LineaGraficaManager: React.FC<Props> = () => {
 
               {/* Imagotipo Vectorial Maestro */}
               <div style={{ background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '12px', border: '1px solid var(--ea-border)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
                   <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 700, color: 'var(--ea-teal)' }}>
                     Imagotipo Vectorial Maestro (Código SVG / Símbolo Oficial)
                   </h4>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--ea-text-muted)' }}>
-                    Se inyecta automáticamente en los 8 materiales del personal
-                  </span>
+                  <label 
+                    className="ea-btn ea-btn-teal" 
+                    style={{ fontSize: '0.75rem', padding: '6px 14px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <Upload size={14} />
+                    <span>Cargar Archivo SVG / Imagen desde mi PC</span>
+                    <input 
+                      type="file" 
+                      accept=".svg,image/*" 
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        if (file.name.endsWith('.svg') || file.type.includes('svg')) {
+                          reader.onload = (loadEvent) => {
+                            const svgText = loadEvent.target?.result as string;
+                            setEditingLinea(prev => prev ? { ...prev, logoSvg: svgText } : null);
+                            showToast(`Archivo SVG cargado: ${file.name}`);
+                          };
+                          reader.readAsText(file);
+                        } else {
+                          reader.onload = (loadEvent) => {
+                            const dataUrl = loadEvent.target?.result as string;
+                            const wrappedSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><image href="${dataUrl}" width="200" height="200"/></svg>`;
+                            setEditingLinea(prev => prev ? { ...prev, logoSvg: wrappedSvg } : null);
+                            showToast(`Imagen ${file.name} adaptada como imagotipo`);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
                 </div>
                 
                 <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -765,7 +795,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
                       value={editingLinea.logoSvg || ''} 
                       onChange={e => setEditingLinea({ ...editingLinea, logoSvg: e.target.value })}
                       rows={4}
-                      placeholder="<svg viewBox='0 0 100 100' ...> ... </svg>"
+                      placeholder="<svg viewBox='0 0 100 100' ...> ... </svg> o usa el botón 'Cargar Archivo SVG'"
                       style={{ width: '100%', padding: '10px', fontFamily: 'monospace', fontSize: '0.75rem', background: 'rgba(0,0,0,0.5)', border: '1px solid var(--ea-border)', borderRadius: '8px', color: '#10B981' }}
                     />
                   </div>

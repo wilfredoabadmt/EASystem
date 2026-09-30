@@ -26,7 +26,63 @@ export const GraphicGenerator: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const handleExportPNG = () => {
-    alert(`Generando pieza en alta resolución (${format}) con marcas de agua y firma digital... Archivo descargado exitosamente.`);
+    // Generar documento SVG de alta fidelidad exportable y descargable
+    const filename = `GAMEA_${format}_${folio}.svg`;
+    const w = format === 'POST_INSTAGRAM' ? 800 : format === 'STORY_INSTAGRAM' ? 720 : format === 'CREDENCIAL' ? 400 : 794;
+    const h = format === 'POST_INSTAGRAM' ? 800 : format === 'STORY_INSTAGRAM' ? 1280 : format === 'CREDENCIAL' ? 600 : 1123;
+
+    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+      <defs>
+        <linearGradient id="aguayo" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#4B008F" />
+          <stop offset="25%" stop-color="#F5007B" />
+          <stop offset="50%" stop-color="#F5B400" />
+          <stop offset="75%" stop-color="#008F89" />
+          <stop offset="100%" stop-color="#690BB2" />
+        </linearGradient>
+      </defs>
+      <rect width="${w}" height="${h}" fill="#FFFFFF" />
+      <rect width="${w}" height="10" fill="url(#aguayo)" />
+      
+      <!-- Encabezado Institucional -->
+      <rect y="10" width="${w}" height="90" fill="#090314" />
+      <text x="40" y="55" fill="#FFFFFF" font-family="Montserrat, sans-serif" font-size="20" font-weight="900">GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO</text>
+      <text x="40" y="80" fill="#008F89" font-family="Poppins, sans-serif" font-size="12" font-weight="600">${secretaria}</text>
+
+      <!-- Folio -->
+      <text x="${w - 240}" y="55" fill="#F5007B" font-family="Montserrat, sans-serif" font-size="12" font-weight="700">FOLIO OFICIAL:</text>
+      <text x="${w - 240}" y="75" fill="#FFFFFF" font-family="monospace" font-size="11">${folio}</text>
+
+      <!-- Contenido Principal -->
+      <text x="40" y="160" fill="#4B008F" font-family="Montserrat, sans-serif" font-size="22" font-weight="900">${title}</text>
+      <text x="40" y="200" fill="#F5007B" font-family="Montserrat, sans-serif" font-size="14" font-weight="700">${subtitle}</text>
+      
+      <!-- Cuerpo del Mensaje -->
+      <foreignObject x="40" y="230" width="${w - 80}" height="${h - 380}">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Poppins, sans-serif; font-size: 15px; color: #333333; line-height: 1.7;">
+          ${content}
+        </div>
+      </foreignObject>
+
+      <!-- Pie de página con firma y QR -->
+      <line x1="40" y1="${h - 90}" x2="${w - 40}" y2="${h - 90}" stroke="#E5E7EB" stroke-width="2" />
+      <text x="40" y="${h - 60}" fill="#4B008F" font-family="Montserrat, sans-serif" font-size="13" font-weight="700">${dateText}</text>
+      <text x="40" y="${h - 40}" fill="#9CA3AF" font-family="Poppins, sans-serif" font-size="11">Firma digital institucional - Verificación inmutable GAMEA</text>
+      
+      <rect x="${w - 120}" y="${h - 80}" width="80" height="50" fill="#F3E8FF" rx="6" />
+      <text x="${w - 110}" y="${h - 55}" fill="#4B008F" font-family="Montserrat, sans-serif" font-size="10" font-weight="800">QR OFICIAL</text>
+      <text x="${w - 110}" y="${h - 42}" fill="#6B21A8" font-family="monospace" font-size="8">VALIDADO</text>
+      
+      <rect y="${h - 8}" width="${w}" height="8" fill="url(#aguayo)" />
+    </svg>`;
+
+    const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (

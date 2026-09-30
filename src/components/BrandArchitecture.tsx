@@ -282,11 +282,88 @@ export const BrandArchitecture: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', gap: '12px' }}>
-            <button className="ea-btn ea-btn-teal" style={{ flex: 1 }}>
+            <button 
+              onClick={() => {
+                const svgData = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 140" width="650" height="140">
+                  <rect width="650" height="140" fill="${previewVariant === 'white' ? '#4B008F' : '#090314'}" rx="12"/>
+                  <!-- Símbolo Andino Pirámide -->
+                  <polygon points="30,105 65,35 100,105" fill="${previewVariant === 'white' ? '#FFFFFF' : '#4B008F'}"/>
+                  <polygon points="45,105 65,60 85,105" fill="${previewVariant === 'white' ? '#4B008F' : '#F5007B'}"/>
+                  <!-- Línea divisoria vertical -->
+                  <line x1="260" y1="30" x2="260" y2="110" stroke="${previewVariant === 'white' ? 'rgba(255,255,255,0.4)' : '#008F89'}" stroke-width="2"/>
+                  <!-- Textos -->
+                  <text x="120" y="70" fill="#FFFFFF" font-family="Montserrat, sans-serif" font-size="28" font-weight="900" letter-spacing="1">EL ALTO</text>
+                  <text x="120" y="95" fill="${previewVariant === 'white' ? '#FFAAD4' : '#F5007B'}" font-family="Poppins, sans-serif" font-size="11" font-weight="700" letter-spacing="2">GOBIERNO AUTÓNOMO MUNICIPAL</text>
+                  <text x="280" y="65" fill="${previewVariant === 'white' ? '#FFFFFF' : '#65F0EB'}" font-family="Montserrat, sans-serif" font-size="16" font-weight="700">${activeSubbrandText}</text>
+                  <text x="280" y="88" fill="${previewVariant === 'white' ? 'rgba(255,255,255,0.7)' : '#9CA3AF'}" font-family="Poppins, sans-serif" font-size="11">Identificador Avalado • DIRCOM</text>
+                </svg>`;
+                const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Submarca_${activeSubbrandText.replace(/[^a-zA-Z0-9]/g, '_')}_${previewVariant}.svg`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="ea-btn ea-btn-teal" 
+              style={{ flex: 1 }}
+              title="Descargar logotipo oficial en formato SVG"
+            >
               <Download size={16} />
               <span>Descargar SVG Vector</span>
             </button>
-            <button className="ea-btn ea-btn-secondary" style={{ flex: 1 }}>
+            
+            <button 
+              onClick={() => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 1200;
+                canvas.height = 360;
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                  ctx.fillStyle = previewVariant === 'white' ? '#4B008F' : '#090314';
+                  ctx.fillRect(0, 0, 1200, 360);
+                  
+                  // Triángulo andino
+                  ctx.fillStyle = previewVariant === 'white' ? '#FFFFFF' : '#F5007B';
+                  ctx.beginPath();
+                  ctx.moveTo(80, 260);
+                  ctx.lineTo(140, 100);
+                  ctx.lineTo(200, 260);
+                  ctx.fill();
+
+                  // Textos en alta resolución
+                  ctx.fillStyle = '#FFFFFF';
+                  ctx.font = 'bold 52px Montserrat, sans-serif';
+                  ctx.fillText('EL ALTO', 240, 180);
+                  ctx.font = 'bold 22px Poppins, sans-serif';
+                  ctx.fillStyle = previewVariant === 'white' ? '#FFAAD4' : '#008F89';
+                  ctx.fillText('GOBIERNO AUTÓNOMO MUNICIPAL', 240, 230);
+
+                  // Línea divisoria
+                  ctx.strokeStyle = '#008F89';
+                  ctx.lineWidth = 4;
+                  ctx.beginPath();
+                  ctx.moveTo(680, 80);
+                  ctx.lineTo(680, 280);
+                  ctx.stroke();
+
+                  // Submarca
+                  ctx.fillStyle = '#FFFFFF';
+                  ctx.font = 'bold 36px Montserrat, sans-serif';
+                  ctx.fillText(activeSubbrandText, 720, 180);
+                  ctx.fillStyle = '#9CA3AF';
+                  ctx.font = '22px Poppins, sans-serif';
+                  ctx.fillText('Identificador Oficial Aprobado', 720, 230);
+                }
+                const a = document.createElement('a');
+                a.href = canvas.toDataURL('image/png');
+                a.download = `Submarca_${activeSubbrandText.replace(/[^a-zA-Z0-9]/g, '_')}_300dpi.png`;
+                a.click();
+              }}
+              className="ea-btn ea-btn-secondary" 
+              style={{ flex: 1 }}
+              title="Descargar en alta resolución PNG 300DPI"
+            >
               <Download size={16} />
               <span>Descargar PNG 300DPI</span>
             </button>

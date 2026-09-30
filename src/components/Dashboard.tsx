@@ -9,15 +9,23 @@ import {
   CheckCircle,
   Activity,
   Calendar,
-  AlertCircle
+  AlertCircle,
+  Folder,
+  Palette,
+  Sliders,
+  Scan,
+  Bot,
+  ArrowRight,
+  Upload
 } from 'lucide-react';
 import { UserProfile } from './LoginPage';
 
 interface DashboardProps {
   user: UserProfile;
+  onNavigate?: (tab: 'DASHBOARD' | 'LINEA_GRAFICA' | 'BRAND_BOOK' | 'ARCHITECTURE' | 'GENERATOR' | 'VALIDATOR' | 'BAM' | 'ALTO_IA') => void;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ user }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       {/* Welcome Banner */}
@@ -26,7 +34,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user }) => {
         background: 'linear-gradient(135deg, rgba(75, 0, 143, 0.4) 0%, rgba(245, 0, 123, 0.15) 100%)',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '20px'
       }}>
         <div>
           <div className="ea-badge ea-badge-purple" style={{ marginBottom: '8px' }}>
@@ -62,8 +72,79 @@ export const Dashboard: React.FC<DashboardProps> = ({ user }) => {
         </div>
       </div>
 
+      {/* Acciones Rápidas del Sistema (Navegación 100% Funcional) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+        {[
+          { 
+            tab: 'BAM', 
+            label: 'Subir Mis Diseños (BAM)', 
+            desc: 'Biblioteca de activos vectoriales y logos', 
+            icon: Upload, 
+            btnColor: 'ea-btn-primary' 
+          },
+          { 
+            tab: 'LINEA_GRAFICA', 
+            label: 'Línea Gráfica Maestra', 
+            desc: 'CRUD en PostgreSQL y adaptación al personal', 
+            icon: Palette, 
+            btnColor: 'ea-btn-teal' 
+          },
+          { 
+            tab: 'GENERATOR', 
+            label: 'Generador Gráfico', 
+            desc: 'Comunicados A4, posts y credenciales', 
+            icon: Sliders, 
+            btnColor: 'ea-btn-secondary' 
+          },
+          { 
+            tab: 'VALIDATOR', 
+            label: 'Auditor Brand Validator', 
+            desc: 'Escanear afiches e identificar infracciones', 
+            icon: Scan, 
+            btnColor: 'ea-btn-secondary' 
+          },
+          { 
+            tab: 'ALTO_IA', 
+            label: 'Alto IA Assistant', 
+            desc: 'Asistente de marca con OpenRouter', 
+            icon: Bot, 
+            btnColor: 'ea-btn-secondary' 
+          }
+        ].map((action, idx) => {
+          const Icon = action.icon;
+          return (
+            <div 
+              key={idx} 
+              className="ea-card" 
+              style={{ 
+                padding: '20px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'space-between',
+                transition: 'all 0.2s ease',
+                cursor: 'pointer'
+              }}
+              onClick={() => onNavigate && onNavigate(action.tab as any)}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                  <Icon size={18} color="var(--ea-secondary)" />
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700 }}>{action.label}</h4>
+                </div>
+                <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--ea-text-muted)' }}>{action.desc}</p>
+              </div>
+
+              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--ea-teal)', fontWeight: 600 }}>
+                <span>Abrir módulo</span>
+                <ArrowRight size={14} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       {/* 5 Main KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
         {[
           { label: 'Usuarios Activos', val: '248', icon: Users, color: 'var(--ea-teal)' },
           { label: 'Solicitudes en Curso', val: '14', icon: Activity, color: 'var(--ea-gold)' },

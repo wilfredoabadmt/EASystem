@@ -164,7 +164,7 @@ export const App: React.FC = () => {
 
       {/* Main Workspace Body */}
       <main style={{ flex: 1, padding: '36px', maxWidth: '1600px', margin: '0 auto', width: '100%' }}>
-        {currentTab === 'DASHBOARD' && <Dashboard user={currentUser} />}
+        {currentTab === 'DASHBOARD' && <Dashboard user={currentUser} onNavigate={setCurrentTab} />}
         {currentTab === 'LINEA_GRAFICA' && <LineaGraficaManager userRole={currentUser.role} />}
         {currentTab === 'BRAND_BOOK' && <DigitalBrandBook />}
         {currentTab === 'ARCHITECTURE' && <BrandArchitecture />}

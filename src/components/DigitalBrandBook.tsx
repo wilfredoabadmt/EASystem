@@ -27,6 +27,42 @@ export const DigitalBrandBook: React.FC = () => {
 
   const activeModule = BRAND_MODULES_16.find(m => m.id === activeModuleId) || BRAND_MODULES_16[0];
 
+  const handleDownloadModule = () => {
+    const filename = `GAMEA_BrandBook_Modulo_${String(activeModule.id).padStart(2, '0')}_${activeModule.title.replace(/\s+/g, '_')}.md`;
+    const content = `# MANUAL DE IMAGEN INSTITUCIONAL — GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO
+## Módulo ${String(activeModule.id).padStart(2, '0')}: ${activeModule.title}
+**Categoría:** ${activeModule.category}
+**Fecha de Emisión:** 2026-09-29
+**Autoridad Emisora:** Dirección de Comunicación Institucional (DIRCOM)
+
+---
+
+### 1. Resumen Ejecutivo
+${activeModule.desc}
+
+### 2. Normas de Aplicación Obligatoria
+- Este módulo rige de forma inmutable para todas las Secretarías, Direcciones Desconcentradas y Empresas Públicas Municipales.
+- El uso de cualquier versión distorsionada, sombras duras o variantes tipográficas fuera de la norma constituye infracción a la gobernanza visual del GAMEA.
+- Los activos vectoriales oficiales (.SVG) deben obtenerse exclusivamente de la biblioteca digital BAM.
+
+### 3. Paleta Cromática Institucional de Soporte
+- Púrpura Alteño: #4B008F
+- Rosa Rebelde: #F5007B
+- Turquesa Integración: #008F89
+- Oro Andino: #F5B400
+
+---
+*Documento emitido bajo el sistema EASystem v1.0.0 — Soberanía Digital y Gobierno Abierto.*`;
+
+    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '32px', minHeight: '80vh' }}>
       {/* Sidebar de los 16 módulos */}
@@ -84,9 +120,14 @@ export const DigitalBrandBook: React.FC = () => {
             <p style={{ color: 'var(--ea-text-muted)', marginTop: '4px' }}>{activeModule.desc}</p>
           </div>
 
-          <button className="ea-btn ea-btn-secondary" style={{ padding: '10px 20px', fontSize: '0.85rem' }}>
+          <button 
+            onClick={handleDownloadModule}
+            className="ea-btn ea-btn-secondary" 
+            style={{ padding: '10px 20px', fontSize: '0.85rem' }}
+            title="Descargar especificación de este módulo"
+          >
             <Download size={16} />
-            <span>Descargar Módulo (PDF/Vector)</span>
+            <span>Descargar Módulo (Norma Oficial)</span>
           </button>
         </div>
 
