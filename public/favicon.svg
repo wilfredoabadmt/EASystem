@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="eaBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2D0654" />
+      <stop offset="50%" stop-color="#140226" />
+      <stop offset="100%" stop-color="#080110" />
+    </linearGradient>
+    <linearGradient id="eaAguayo" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4B008F" />
+      <stop offset="25%" stop-color="#F5007B" />
+      <stop offset="50%" stop-color="#F5B400" />
+      <stop offset="75%" stop-color="#008F89" />
+      <stop offset="100%" stop-color="#690BB2" />
+    </linearGradient>
+    <linearGradient id="eaPink" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF2E93" />
+      <stop offset="100%" stop-color="#F5007B" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#F5007B" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Base Icono Redondeada -->
+  <rect width="128" height="128" rx="28" fill="url(#eaBg)" />
+  <rect x="2" y="2" width="124" height="124" rx="26" fill="none" stroke="#F5007B" stroke-width="2.5" stroke-opacity="0.6" />
+
+  <!-- Cintillo Aguayo Inferior -->
+  <path d="M12 114 H116" stroke="url(#eaAguayo)" stroke-width="6" stroke-linecap="round" />
+
+  <!-- Pirámide Andina / Símbolo Cholet de El Alto con Sombra Glow -->
+  <g filter="url(#glow)">
+    <!-- Triángulo Exterior Fucsia / Rosa Aguayo -->
+    <path d="M28 100 L64 28 L100 100 Z" fill="url(#eaPink)" />
+
+    <!-- Triángulo Interior Dorado / Sol de Septiembre -->
+    <path d="M46 100 L64 64 L82 100 Z" fill="#F5B400" />
+
+    <!-- Núcleo Tecnológico / Innovación Teal -->
+    <circle cx="64" cy="50" r="9" fill="#008F89" stroke="#FFFFFF" stroke-width="2.5" />
+
+    <!-- Cúspide de Precisión en Blanco -->
+    <path d="M64 18 L72 28 H56 Z" fill="#FFFFFF" />
+  </g>
+</svg>

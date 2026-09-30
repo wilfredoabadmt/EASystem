@@ -80,35 +80,35 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
             label: 'Biblioteca de Archivos', 
             desc: 'Sube tus logotipos, afiches y archivos de diseño', 
             icon: Upload, 
-            btnColor: 'ea-btn-primary' 
+            color: '#FB923C'
           },
           { 
             tab: 'LINEA_GRAFICA', 
             label: 'Línea Gráfica & Materiales', 
             desc: 'Gestión de línea maestra y adaptación a credenciales, notas y afiches', 
             icon: Palette, 
-            btnColor: 'ea-btn-teal' 
+            color: '#F43F5E'
           },
           { 
             tab: 'GENERATOR', 
-            label: 'Generador de Piezas Gráficas', 
-            desc: 'Crea comunicados oficiales, afiches y credenciales en minutos', 
+            label: 'Generador de Piezas & Prensa', 
+            desc: 'Crea comunicados oficiales, afiches y noticias para elalto.gob.bo', 
             icon: Sliders, 
-            btnColor: 'ea-btn-secondary' 
+            color: '#34D399'
           },
           { 
             tab: 'VALIDATOR', 
             label: 'Validador de Diseños Oficiales', 
             desc: 'Revisa que tus diseños cumplan con la normativa municipal', 
             icon: Scan, 
-            btnColor: 'ea-btn-secondary' 
+            color: '#FBBF24'
           },
           { 
             tab: 'ALTO_IA', 
             label: 'Asistente Inteligente Alto IA', 
             desc: 'Consultas y redacción de textos institucionales con Inteligencia Artificial', 
             icon: Bot, 
-            btnColor: 'ea-btn-secondary' 
+            color: '#EC4899'
           }
         ].map((action, idx) => {
           const Icon = action.icon;
@@ -117,26 +117,41 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
               key={idx} 
               className="ea-card" 
               style={{ 
-                padding: '20px', 
+                padding: '22px', 
                 display: 'flex', 
                 flexDirection: 'column', 
                 justifyContent: 'space-between',
-                transition: 'all 0.2s ease',
-                cursor: 'pointer'
+                transition: 'all 0.25s ease',
+                cursor: 'pointer',
+                borderRadius: '14px'
               }}
               onClick={() => onNavigate && onNavigate(action.tab as any)}
             >
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <Icon size={18} color="var(--ea-secondary)" />
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700 }}>{action.label}</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '12px' }}>
+                  <div style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '10px',
+                    background: `${action.color}22`,
+                    border: `1.5px solid ${action.color}66`,
+                    color: action.color,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: `0 0 16px ${action.color}33`,
+                    flexShrink: 0
+                  }}>
+                    <Icon size={22} strokeWidth={2.3} />
+                  </div>
+                  <h4 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 800 }}>{action.label}</h4>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--ea-text-muted)' }}>{action.desc}</p>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--ea-text-muted)', lineHeight: 1.5 }}>{action.desc}</p>
               </div>
 
-              <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--ea-teal)', fontWeight: 600 }}>
+              <div style={{ marginTop: '18px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: action.color, fontWeight: 700 }}>
                 <span>Abrir módulo</span>
-                <ArrowRight size={14} />
+                <ArrowRight size={15} />
               </div>
             </div>
           );
