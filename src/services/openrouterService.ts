@@ -1,6 +1,7 @@
 // =============================================================================
 // EL ALTO DIGITAL EASYSTEM (EASystem)
 // OpenRouter AI Service — Modelos Gratuitos para Alto IA Brand Assistant
+// Con Auto-Fallback y Detección Dinámica de Modelos
 // =============================================================================
 
 export interface OpenRouterModelOption {
@@ -14,45 +15,61 @@ export interface OpenRouterModelOption {
 
 export const FREE_OPENROUTER_MODELS: OpenRouterModelOption[] = [
   {
-    id: 'meta-llama/llama-3.3-70b-instruct:free',
-    name: 'Llama 3.3 70B Instruct (Free)',
-    provider: 'Meta',
-    description: 'Excelente para redacción institucional, notas de prensa y comunicados oficiales con tono alteño.',
-    contextLength: '128k',
+    id: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+    name: 'NVIDIA Nemotron 3 Nano Omni (Free)',
+    provider: 'NVIDIA',
+    description: 'Excelente para redacción institucional, notas de prensa y comunicados con tono alteño en español.',
+    contextLength: '256k',
     badge: 'Recomendado'
   },
   {
-    id: 'deepseek/deepseek-r1:free',
-    name: 'DeepSeek R1 (Free)',
-    provider: 'DeepSeek',
-    description: 'Modelo de razonamiento profundo. Ideal para consultas complejas sobre normativas del Brand Book.',
-    contextLength: '64k',
-    badge: 'Razonamiento'
+    id: 'nvidia/nemotron-3-super-120b-a12b:free',
+    name: 'NVIDIA Nemotron 3 Super 120B (Free)',
+    provider: 'NVIDIA',
+    description: 'Modelo de 120B de parámetros de alta capacidad para redacción de documentos complejos.',
+    contextLength: '262k',
+    badge: 'Potencia 120B'
   },
   {
-    id: 'google/gemini-2.0-flash-lite-preview-02-05:free',
-    name: 'Gemini 2.0 Flash Lite (Free)',
-    provider: 'Google',
-    description: 'Velocidad ultra-rápida. Perfecto para respuestas instantáneas de copy y redes sociales.',
+    id: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+    name: 'NVIDIA Nemotron 3 Ultra 550B (Free)',
+    provider: 'NVIDIA',
+    description: 'Modelo colosal de 550B de parámetros y 1 millón de tokens de contexto.',
+    contextLength: '1M',
+    badge: 'Ultra 550B'
+  },
+  {
+    id: 'nvidia/nemotron-3.5-lightning:free',
+    name: 'NVIDIA Nemotron 3.5 Lightning (Free)',
+    provider: 'NVIDIA',
+    description: 'Modelo relámpago con 1 millón de tokens de ventana de contexto.',
     contextLength: '1M',
     badge: 'Ultra Rápido'
   },
   {
-    id: 'qwen/qwen-2.5-coder-32b-instruct:free',
-    name: 'Qwen 2.5 Coder 32B (Free)',
+    id: 'qwen/qwen3.8-27b:free',
+    name: 'Qwen 3.8 27B (Free)',
     provider: 'Alibaba Cloud',
-    description: 'Especializado en estructura técnica, tokens CSS, código SVG y formatos estructurados.',
-    contextLength: '32k',
-    badge: 'Técnico'
+    description: 'Especializado en redacción formal y estructuración de normativas.',
+    contextLength: '262k',
+    badge: 'Estructurado'
   },
   {
-    id: 'mistralai/mistral-small-24b-instruct-2501:free',
-    name: 'Mistral Small 24B (Free)',
-    provider: 'Mistral AI',
-    description: 'Equilibrado y conciso. Muy bueno para resúmenes ejecutivos y síntesis de notas.',
-    contextLength: '32k',
-    badge: 'Equilibrado'
+    id: 'google/gemma-4-31b-it:free',
+    name: 'Google Gemma 4 31B (Free)',
+    provider: 'Google',
+    description: 'Modelo de Google para instrucciones detalladas y síntesis de notas.',
+    contextLength: '262k',
+    badge: 'Google AI'
   }
+];
+
+// Lista de modelos de respaldo en caso de que uno esté saturado
+const FALLBACK_MODELS = [
+  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'nvidia/nemotron-3-ultra-550b-a55b:free',
+  'nvidia/nemotron-3.5-lightning:free'
 ];
 
 export interface OpenRouterChatMessage {
@@ -89,7 +106,7 @@ REGLAS ESTRICTAS DEL BRAND BOOK (GAMEA):
 - Área de Reserva del Imagotipo: 2X perimetral libre de cualquier interferencia gráfica o textual.
 
 FORMATO DE TUS RESPUESTAS:
-- Sé directo, profesional y claro.
+- Sé directo, profesional y claro en español.
 - Cuando redactes un comunicado o nota oficial, formatéalo en un bloque claro y estructurado con encabezado, cuerpo, fecha, firma institucional y hashtags recomendados.
 - Si detectas una consulta que infringe el Brand Book (por ejemplo, usar un color verde flúor o estirar el logo), adviértelo amablemente y sugiere la alternativa oficial.`;
 
@@ -133,7 +150,7 @@ class OpenRouterService {
     } catch (e) {}
 
     const envModel = (import.meta as any).env?.VITE_OPENROUTER_DEFAULT_MODEL;
-    return envModel || 'meta-llama/llama-3.3-70b-instruct:free';
+    return envModel || 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free';
   }
 
   public saveSelectedModel(modelId: string): void {
@@ -142,12 +159,48 @@ class OpenRouterService {
     } catch (e) {}
   }
 
+  private cleanReplyText(text: string): { cleaned: string; snippet?: string } {
+    // Si contiene tags de pensamiento <think>...</think>, formatearlos
+    let cleaned = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+    if (!cleaned) cleaned = text;
+
+    // Extraer snippets de código o comunicados si están entre ```
+    let snippet: string | undefined = undefined;
+    const codeBlockMatch = cleaned.match(/```(?:markdown|txt)?([\s\S]*?)```/);
+    if (codeBlockMatch && codeBlockMatch[1]) {
+      snippet = codeBlockMatch[1].trim();
+    }
+
+    return { cleaned, snippet };
+  }
+
+  private async callApi(apiKey: string, model: string, messages: OpenRouterChatMessage[]): Promise<any> {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': 'https://easystem.200.105.141.138.sslip.io',
+        'X-Title': 'El Alto Digital EASystem',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: messages,
+        temperature: 0.7,
+        max_tokens: 1024
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+    return { ok: response.ok, status: response.status, data };
+  }
+
   public async sendChatCompletion(
     conversation: { sender: 'user' | 'ia'; text: string }[],
     modelId?: string
-  ): Promise<{ text: string; snippet?: string; error?: string }> {
+  ): Promise<{ text: string; snippet?: string; modelUsed?: string; error?: string }> {
     const apiKey = this.getApiKey();
-    const model = modelId || this.getSelectedModel();
+    const primaryModel = modelId || this.getSelectedModel();
 
     if (!apiKey) {
       return {
@@ -156,12 +209,10 @@ class OpenRouterService {
       };
     }
 
-    // Construir historial de mensajes en formato OpenAI / OpenRouter
     const apiMessages: OpenRouterChatMessage[] = [
       { role: 'system', content: GAMEA_SYSTEM_PROMPT }
     ];
 
-    // Incluir últimos 6 turnos para mantener contexto sin sobrecargar tokens
     const recent = conversation.slice(-6);
     for (const msg of recent) {
       apiMessages.push({
@@ -170,65 +221,49 @@ class OpenRouterService {
       });
     }
 
-    try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'HTTP-Referer': 'https://easystem.200.105.141.138.sslip.io',
-          'X-Title': 'El Alto Digital EASystem',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: model,
-          messages: apiMessages,
-          temperature: 0.7,
-          max_tokens: 1024
-        })
-      });
+    // 1. Intentar con el modelo primario seleccionado
+    const primaryAttempt = await this.callApi(apiKey, primaryModel, apiMessages);
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        const errMessage = errorData?.error?.message || `HTTP ${response.status}: ${response.statusText}`;
-        console.error('OpenRouter API Error:', errMessage);
+    if (primaryAttempt.ok && primaryAttempt.data?.choices?.[0]?.message?.content) {
+      const rawText = primaryAttempt.data.choices[0].message.content;
+      const { cleaned, snippet } = this.cleanReplyText(rawText);
+      return { text: cleaned, snippet, modelUsed: primaryModel };
+    }
 
-        if (response.status === 401) {
-          return {
-            text: `❌ Error de autenticación en OpenRouter: Tu API Key es inválida o expiró. Verifica tu clave en openrouter.ai/keys.`,
-            error: 'INVALID_API_KEY'
-          };
-        } else if (response.status === 429) {
-          return {
-            text: `⏳ Límite de tasa alcanzado en el modelo gratuito (${model}). Por favor espera unos segundos o selecciona otro modelo gratuito como Gemini 2.0 Flash Lite o DeepSeek R1 en el menú.`,
-            error: 'RATE_LIMIT'
-          };
-        }
-
-        return {
-          text: `⚠️ Error al procesar consulta con OpenRouter (${model}): ${errMessage}`,
-          error: errMessage
-        };
-      }
-
-      const data = await response.json();
-      const reply = data?.choices?.[0]?.message?.content || 'Sin respuesta del modelo.';
-
-      // Extraer snippets de código o comunicados si están entre ```
-      let snippet: string | undefined = undefined;
-      const codeBlockMatch = reply.match(/```(?:markdown|txt)?([\s\S]*?)```/);
-      if (codeBlockMatch && codeBlockMatch[1]) {
-        snippet = codeBlockMatch[1].trim();
-      }
-
-      return { text: reply, snippet };
-
-    } catch (err: any) {
-      console.error('OpenRouter Fetch Exception:', err);
+    // 2. Si falla por falta de clave (401), avisar directamente
+    if (primaryAttempt.status === 401) {
       return {
-        text: `⚠️ Error de conexión con el servicio de OpenRouter: ${err.message || 'Verifica tu conexión a internet.'}`,
-        error: 'NETWORK_ERROR'
+        text: `❌ Error de autenticación en OpenRouter: Tu API Key es inválida. Verifica tu clave en openrouter.ai/keys e ingrésala en "Administrar API Key".`,
+        error: 'INVALID_API_KEY'
       };
     }
+
+    // 3. Si el modelo no está disponible o tiene rate limit, activar AUTO-FALLBACK
+    const candidateFallbacks = FALLBACK_MODELS.filter(m => m !== primaryModel);
+    for (const fallbackModel of candidateFallbacks) {
+      try {
+        const fallbackAttempt = await this.callApi(apiKey, fallbackModel, apiMessages);
+        if (fallbackAttempt.ok && fallbackAttempt.data?.choices?.[0]?.message?.content) {
+          const rawText = fallbackAttempt.data.choices[0].message.content;
+          const { cleaned, snippet } = this.cleanReplyText(rawText);
+          const fallbackNote = `\n\n> *(Respuesta procesada con **${fallbackModel.split('/')[1] || fallbackModel}** debido a saturación temporal en el modelo principal)*`;
+          return {
+            text: cleaned + fallbackNote,
+            snippet,
+            modelUsed: fallbackModel
+          };
+        }
+      } catch (e) {
+        // Seguir al siguiente fallback
+      }
+    }
+
+    // Si todos fallaron
+    const errMsg = primaryAttempt.data?.error?.message || `HTTP ${primaryAttempt.status}`;
+    return {
+      text: `⚠️ Los modelos gratuitos de OpenRouter están temporalmente saturados en los proveedores compartidos. Detalle: ${errMsg}. Por favor intenta de nuevo en unos segundos.`,
+      error: errMsg
+    };
   }
 }
 
