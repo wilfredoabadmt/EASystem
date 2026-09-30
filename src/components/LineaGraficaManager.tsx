@@ -26,7 +26,8 @@ import {
   CheckCircle2, 
   AlertCircle,
   Download,
-  Info
+  Info,
+  RotateCcw
 } from 'lucide-react';
 
 interface Props {
@@ -241,26 +242,39 @@ export const LineaGraficaManager: React.FC<Props> = () => {
         </div>
       </div>
 
-      {/* Navigation Sub-Tabs & Actions */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+      {/* Navigation Sub-Tabs & Actions - Alineados en Una Sola Fila */}
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        gap: '12px',
+        flexWrap: 'nowrap',
+        overflowX: 'auto',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+        paddingBottom: '4px'
+      }}>
         
-        <div style={{ display: 'flex', gap: '8px' }}>
+        {/* Pestañas de Vista */}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
           <button
             onClick={() => setCurrentView('CATALOGO')}
             className={`ea-btn ${currentView === 'CATALOGO' ? 'ea-btn-primary' : 'ea-btn-secondary'}`}
-            style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+            style={{ fontSize: '0.82rem', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '7px', whiteSpace: 'nowrap' }}
+            title="Catálogo Oficial de Líneas Gráficas Municipales"
           >
             <Layers size={16} />
-            <span>1. Catálogo Líneas Gráficas ({lineas.length})</span>
+            <span>Líneas Gráficas ({lineas.length})</span>
           </button>
 
           <button
             onClick={() => setCurrentView('MATERIALES')}
             className={`ea-btn ${currentView === 'MATERIALES' ? 'ea-btn-primary' : 'ea-btn-secondary'}`}
-            style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}
+            style={{ fontSize: '0.82rem', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '7px', position: 'relative', whiteSpace: 'nowrap' }}
+            title="Materiales Institucionales Adaptados del Personal (Credenciales, Sellos, Hojas)"
           >
             <Sparkles size={16} />
-            <span>2. Materiales Adaptados del Personal</span>
+            <span>Materiales</span>
             <span style={{
               background: 'var(--ea-secondary)',
               color: '#FFF',
@@ -276,30 +290,34 @@ export const LineaGraficaManager: React.FC<Props> = () => {
           <button
             onClick={() => setCurrentView('AUDITORIA')}
             className={`ea-btn ${currentView === 'AUDITORIA' ? 'ea-btn-primary' : 'ea-btn-secondary'}`}
-            style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+            style={{ fontSize: '0.82rem', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '7px', whiteSpace: 'nowrap' }}
+            title="Historial de Auditoría y Trazabilidad de Cambios"
           >
             <History size={16} />
-            <span>3. Historial de Auditoría y Cambios</span>
+            <span>Historial</span>
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        {/* Botones de Acción */}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
           <button
             onClick={handleResetDefaults}
             className="ea-btn ea-btn-secondary"
-            style={{ fontSize: '0.8rem', padding: '8px 14px' }}
-            title="Restablecer diseños originales"
+            style={{ fontSize: '0.8rem', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}
+            title="Restablecer diseños predeterminados originales"
           >
-            Restablecer Diseños Predeterminados
+            <RotateCcw size={15} />
+            <span>Restablecer</span>
           </button>
 
           <button
             onClick={handleOpenCreate}
             className="ea-btn ea-btn-primary"
-            style={{ fontSize: '0.85rem', padding: '10px 18px', display: 'flex', alignItems: 'center', gap: '8px' }}
+            style={{ fontSize: '0.82rem', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '7px', whiteSpace: 'nowrap' }}
+            title="Subir o registrar una nueva línea gráfica oficial"
           >
-            <PlusCircle size={18} />
-            <span>Subir / Registrar Línea Original</span>
+            <PlusCircle size={16} />
+            <span>Nueva Línea</span>
           </button>
         </div>
 
