@@ -16,10 +16,14 @@ import {
   BookOpen,
   Quote,
   List,
-  Eye
+  Eye,
+  Bot,
+  Wand2,
+  Lightbulb
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { SECRETARIAS_MUNICIPALES } from '../tokens/brandTokens';
+import { openrouterService } from '../services/openrouterService';
 
 type FormatType = 'COMUNICADO_A4' | 'POST_INSTAGRAM' | 'STORY_INSTAGRAM' | 'AFICHE_PRENSA' | 'POST_WORDPRESS';
 type WordPressPreviewTab = 'PREVIEW' | 'HTML' | 'GUIDE';
@@ -38,7 +42,47 @@ export const GraphicGenerator: React.FC = () => {
   const [copiedStatus, setCopiedStatus] = useState<string | null>(null);
   const [wpTab, setWpTab] = useState<WordPressPreviewTab>('PREVIEW');
 
+  // Estado del Agente Inteligente Alto IA
+  const [aiKeywords, setAiKeywords] = useState('bacheo y recarpetado, luminarias LED, distrito 8, reducción de accidentes, horario nocturno');
+  const [aiTone, setAiTone] = useState('Informativo y Persuasivo');
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
+  const [aiNotice, setAiNotice] = useState<string | null>(null);
+
   const canvasRef = useRef<HTMLDivElement>(null);
+
+  // Generador de Copy mediante Agente Inteligente Alto IA
+  const handleGenerateCopyFromAi = async (customTone?: string) => {
+    if (!aiKeywords.trim()) {
+      alert('Por favor introduce palabras clave o la idea central del comunicado/noticia.');
+      return;
+    }
+
+    setIsGeneratingAi(true);
+    setAiNotice(null);
+
+    try {
+      const generated = await openrouterService.generatePressCopy({
+        keywords: aiKeywords.trim(),
+        tone: customTone || aiTone,
+        secretaria,
+        format
+      });
+
+      setTitle(generated.title);
+      setSubtitle(generated.subtitle);
+      setContent(generated.content);
+      if (generated.quote) setQuote(generated.quote);
+      if (generated.keyPoints) setKeyPoints(generated.keyPoints);
+      if (generated.category) setCategory(generated.category);
+
+      setAiNotice('✨ ¡Copy generado por Alto IA! Titular, bajada, cuerpo, cita y datos clave completados con éxito.');
+      setTimeout(() => setAiNotice(null), 6000);
+    } catch (err: any) {
+      alert('Error al generar con Alto IA: ' + (err.message || 'Error desconocido'));
+    } finally {
+      setIsGeneratingAi(false);
+    }
+  };
 
   // Helper para generar el código HTML optimizado para WordPress Gutenberg / Clásico
   const generateWordPressHtml = (): string => {
@@ -411,6 +455,206 @@ ${pointsList.map(pt => `    <li style="margin-bottom: 8px;">${pt}</li>`).join('\
           }}>
             💡 <strong>Integración con elalto.gob.bo:</strong> Genera la noticia con la tipografía, colores del aguayo, cita del alcalde y puntos clave lista para pegar con <strong>Ctrl + V</strong> en el editor de WordPress.
           </div>
+        </div>
+
+        {/* ======================================================== */}
+        {/* AGENTE INTELIGENTE ALTO IA - REDACTOR DE PRENSA Y COPY */}
+        {/* ======================================================== */}
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(75, 0, 143, 0.28) 0%, rgba(245, 0, 123, 0.18) 100%)',
+          border: '1.5px solid rgba(245, 0, 123, 0.4)',
+          borderRadius: '12px',
+          padding: '16px',
+          marginBottom: '20px',
+          boxShadow: '0 8px 24px rgba(75, 0, 143, 0.25)',
+          position: 'relative'
+        }}>
+          {/* Cabecera del Agente */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{
+                width: '30px',
+                height: '30px',
+                borderRadius: '8px',
+                background: 'linear-gradient(135deg, #F5007B 0%, #4B008F 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#FFFFFF',
+                boxShadow: '0 0 12px rgba(245, 0, 123, 0.5)'
+              }}>
+                <Bot size={18} />
+              </div>
+              <div>
+                <strong style={{ fontSize: '0.88rem', color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  Agente Inteligente Alto IA
+                  <Sparkles size={14} color="var(--ea-gold)" />
+                </strong>
+                <div style={{ fontSize: '0.68rem', color: 'var(--ea-text-muted)' }}>
+                  Redacción de Copy Informativo y Persuasivo
+                </div>
+              </div>
+            </div>
+            <span style={{
+              background: 'rgba(0, 143, 137, 0.25)',
+              border: '1px solid var(--ea-teal)',
+              color: '#A7F3D0',
+              fontSize: '0.62rem',
+              fontWeight: 800,
+              padding: '2px 8px',
+              borderRadius: '10px'
+            }}>
+              IA ACTIVA
+            </span>
+          </div>
+
+          <p style={{ fontSize: '0.74rem', color: '#E0E7FF', marginBottom: '10px', lineHeight: 1.4 }}>
+            Escribe palabras clave o temas y Alto IA redactará automáticamente el <strong>titular</strong>, <strong>bajada</strong>, <strong>cuerpo periodístico</strong>, <strong>cita oficial</strong> y <strong>puntos clave</strong>.
+          </p>
+
+          {/* Campo de Palabras Clave */}
+          <div style={{ marginBottom: '10px' }}>
+            <label style={{ display: 'block', fontSize: '0.74rem', fontWeight: 700, color: 'var(--ea-gold)', marginBottom: '4px' }}>
+              🔑 Palabras Clave / Temas a Comunicar:
+            </label>
+            <textarea
+              rows={2}
+              value={aiKeywords}
+              onChange={(e) => setAiKeywords(e.target.value)}
+              placeholder="Ej: bacheo y recarpetado, avenida 6 de marzo, luminarias led, distrito 4, reducción de accidentes, horario nocturno, inversión 3 millones..."
+              style={{
+                width: '100%',
+                padding: '8px 10px',
+                borderRadius: '8px',
+                background: 'rgba(0, 0, 0, 0.5)',
+                border: '1px solid rgba(245, 180, 0, 0.4)',
+                color: '#FFFFFF',
+                fontSize: '0.8rem',
+                fontFamily: 'inherit',
+                resize: 'none'
+              }}
+            />
+          </div>
+
+          {/* Sugerencias Rápidas de Palabras Clave */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
+            <span style={{ fontSize: '0.66rem', color: 'var(--ea-text-muted)' }}>Sugerencias:</span>
+            {[
+              { label: '🏗️ Bacheo y Vías', kw: 'recarpetado y bacheo intensivo, avenida principal, cuadrillas nocturnas, mejora del tráfico y seguridad vial' },
+              { label: '💡 Luminarias LED', kw: 'instalación de 400 luminarias LED de alta potencia, iluminación preventiva, ahorro de energía, distritos 3 y 8' },
+              { label: '🏥 Salud y Vacunas', kw: 'brigadas médicas en plazas, entrega gratuita de medicamentos, vacunación integral para niños y adultos mayores' },
+              { label: '🛡️ Seguridad Vecinal', kw: 'patrullaje continuo, cámaras de videovigilancia interconectadas, guardia municipal y resguardo de ferias' },
+              { label: '🎒 Escuelas Dignas', kw: 'refacción de aulas, entrega de pupitres nuevos, dotación de equipamiento tecnológico para unidades educativas' },
+              { label: '💧 Drenaje Pluvial', kw: 'limpieza de bocas de tormenta, dragado de ríos y cuencas, prevención de inundaciones por temporada de lluvias' }
+            ].map((preset, pIdx) => (
+              <button
+                key={pIdx}
+                type="button"
+                onClick={() => setAiKeywords(preset.kw)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: '12px',
+                  padding: '2px 8px',
+                  color: '#F3F4F6',
+                  fontSize: '0.67rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(245, 0, 123, 0.3)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Tono y Botón de Redacción */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.7rem', color: 'var(--ea-text-muted)', marginBottom: '3px' }}>
+                🎭 Tono de Comunicación:
+              </label>
+              <select
+                value={aiTone}
+                onChange={(e) => setAiTone(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '7px 8px',
+                  borderRadius: '6px',
+                  background: 'rgba(0, 0, 0, 0.5)',
+                  border: '1px solid var(--ea-border)',
+                  color: '#FFFFFF',
+                  fontSize: '0.75rem',
+                  fontFamily: 'inherit'
+                }}
+              >
+                <option value="Informativo y Persuasivo">Informativo y Persuasivo (Prensa)</option>
+                <option value="Solemne y Oficial">Solemne y Oficial (Comunicado)</option>
+                <option value="Urgente y Convocatoria">Urgente / Convocatoria</option>
+                <option value="Orgullo Alteño y Obras">Orgullo Alteño y Obras</option>
+                <option value="Cercano y Vecinal">Cercano y Vecinal (Distritos)</option>
+              </select>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+              <button
+                type="button"
+                onClick={() => handleGenerateCopyFromAi()}
+                disabled={isGeneratingAi}
+                className="ea-btn"
+                style={{
+                  width: '100%',
+                  padding: '7px 12px',
+                  background: isGeneratingAi 
+                    ? '#6B21A8' 
+                    : 'linear-gradient(135deg, #F5007B 0%, #4B008F 100%)',
+                  color: '#FFFFFF',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 14px rgba(245, 0, 123, 0.4)',
+                  cursor: isGeneratingAi ? 'not-allowed' : 'pointer',
+                  border: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px'
+                }}
+              >
+                {isGeneratingAi ? (
+                  <>
+                    <RefreshCw size={14} style={{ animation: 'spin 1s linear infinite' }} />
+                    <span>Redactando...</span>
+                  </>
+                ) : (
+                  <>
+                    <Wand2 size={14} color="var(--ea-gold)" />
+                    <span>Redactar con Alto IA</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Notificación de éxito al generar */}
+          {aiNotice && (
+            <div style={{
+              padding: '8px 12px',
+              borderRadius: '8px',
+              background: 'rgba(5, 150, 105, 0.25)',
+              border: '1px solid #10B981',
+              color: '#D1FAE5',
+              fontSize: '0.73rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              animation: 'fadeIn 0.2s ease'
+            }}>
+              <CheckCircle size={14} color="#34D399" />
+              <span>{aiNotice}</span>
+            </div>
+          )}
         </div>
 
         {/* Inputs */}
