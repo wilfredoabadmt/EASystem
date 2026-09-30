@@ -10,10 +10,15 @@ import {
   Maximize2, 
   Copy,
   Layers,
-  Sparkles
+  Sparkles,
+  Palette,
+  Type
 } from 'lucide-react';
 import { BRAND_MODULES_16, BRAND_TOKENS } from '../tokens/brandTokens';
 import { BrandLogo } from './BrandLogo';
+import { AccessibilityContrastMatrix } from './AccessibilityContrastMatrix';
+import { W3CTokenExporter } from './W3CTokenExporter';
+import { PlainLanguageVoiceGuide } from './PlainLanguageVoiceGuide';
 
 export const DigitalBrandBook: React.FC = () => {
   const [activeModuleId, setActiveModuleId] = useState<number>(1);
@@ -226,6 +231,73 @@ export const DigitalBrandBook: React.FC = () => {
                 </p>
               </div>
             </div>
+          </div>
+        ) : activeModule.id === 11 ? (
+          /* Módulo 11: Paleta Cromática, Accesibilidad WCAG 2.1 y W3C Tokens */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '16px' }}>Paleta Cromática Oficial del GAMEA</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+                {[
+                  { name: 'Púrpura Alteño', hex: '#4B008F', role: 'Primario Institucional', rgb: 'RGB 75, 0, 143' },
+                  { name: 'Rosa Rebelde', hex: '#F5007B', role: 'Secundario Dinámico', rgb: 'RGB 245, 0, 123' },
+                  { name: 'Turquesa Futuro', hex: '#008F89', role: 'Tecnología & Integración', rgb: 'RGB 0, 143, 137' },
+                  { name: 'Oro Andino', hex: '#F5B400', role: 'Cultura & Economía', rgb: 'RGB 245, 180, 0' },
+                  { name: 'Púrpura Profundo', hex: '#690BB2', role: 'Contraste & Sombras', rgb: 'RGB 105, 11, 178' },
+                ].map(c => (
+                  <div key={c.hex} style={{
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    border: '1px solid var(--ea-border)',
+                    background: 'rgba(0,0,0,0.3)'
+                  }}>
+                    <div style={{ height: '90px', background: c.hex }} />
+                    <div style={{ padding: '14px' }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.9rem', color: '#FFFFFF' }}>{c.name}</div>
+                      <div style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--ea-secondary)', marginTop: '4px' }}>{c.hex}</div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--ea-text-muted)', marginTop: '2px' }}>{c.rgb}</div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--ea-teal)', marginTop: '6px' }}>{c.role}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Matriz WCAG 2.1 Contrast Matrix (City of LA / USWDS) */}
+            <AccessibilityContrastMatrix />
+
+            {/* Exportador de Tokens W3C / Figma Tokens Studio (MyDS) */}
+            <W3CTokenExporter />
+          </div>
+        ) : activeModule.id === 12 ? (
+          /* Módulo 12: Tipografía y Guía de Lenguaje Ciudadano (GOV.UK / SF.gov) */
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '16px' }}>Fuentes Tipográficas Oficiales</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div className="ea-card" style={{ padding: '24px' }}>
+                  <div className="ea-badge ea-badge-purple" style={{ marginBottom: '8px' }}>Titulares & Logotipos</div>
+                  <h4 style={{ fontSize: '1.4rem', fontFamily: 'Montserrat, sans-serif', fontWeight: 800, margin: '8px 0' }}>
+                    Montserrat / Gotham
+                  </h4>
+                  <p style={{ color: 'var(--ea-text-muted)', fontSize: '0.85rem' }}>
+                    Uso exclusivo para titulares principales, identificadores de secretaría, gigantografías y portadas. Pesos autorizados: Bold (700) y Black (900).
+                  </p>
+                </div>
+                <div className="ea-card" style={{ padding: '24px' }}>
+                  <div className="ea-badge ea-badge-teal" style={{ marginBottom: '8px' }}>Cuerpo de Texto & Digital</div>
+                  <h4 style={{ fontSize: '1.4rem', fontFamily: 'Poppins, sans-serif', fontWeight: 600, margin: '8px 0' }}>
+                    Poppins / Roboto
+                  </h4>
+                  <p style={{ color: 'var(--ea-text-muted)', fontSize: '0.85rem' }}>
+                    Optimizada para pantallas digitales, párrafos largos, formularios y decretos. Pesos autorizados: Regular (400) y Medium (500).
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Guía de Lenguaje Ciudadano y Cosmovisión Aymara */}
+            <PlainLanguageVoiceGuide />
           </div>
         ) : (
           /* Módulo Informativo Estándar */

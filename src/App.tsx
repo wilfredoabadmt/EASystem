@@ -23,6 +23,7 @@ import { BrandValidator } from './components/BrandValidator';
 import { BrandAssetManager } from './components/BrandAssetManager';
 import { AltoIAAssistant } from './components/AltoIAAssistant';
 import { LineaGraficaManager } from './components/LineaGraficaManager';
+import { OfficialGovBanner } from './components/OfficialGovBanner';
 import { Palette } from 'lucide-react';
 
 type TabType = 'DASHBOARD' | 'LINEA_GRAFICA' | 'BRAND_BOOK' | 'ARCHITECTURE' | 'GENERATOR' | 'VALIDATOR' | 'BAM' | 'ALTO_IA';
@@ -50,17 +51,26 @@ export const App: React.FC = () => {
   if (!inApp) {
     if (showLogin) {
       return (
-        <LoginPage 
-          onLoginSuccess={handleLoginSuccess}
-          onBackToLanding={() => setShowLogin(false)}
-        />
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <OfficialGovBanner />
+          <LoginPage 
+            onLoginSuccess={handleLoginSuccess}
+            onBackToLanding={() => setShowLogin(false)}
+          />
+        </div>
       );
     }
-    return <LandingPage onEnterBrandManager={handleEnterManager} />;
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <OfficialGovBanner />
+        <LandingPage onEnterBrandManager={handleEnterManager} />
+      </div>
+    );
   }
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <OfficialGovBanner />
       <div className="ea-mesh-bg" />
       <div className="ea-aguayo-bar" />
 
