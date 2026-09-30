@@ -12,7 +12,7 @@ import {
 import { BrandLogo } from './BrandLogo';
 import { SECRETARIAS_MUNICIPALES } from '../tokens/brandTokens';
 
-type FormatType = 'COMUNICADO_A4' | 'POST_INSTAGRAM' | 'STORY_INSTAGRAM' | 'CREDENCIAL';
+type FormatType = 'COMUNICADO_A4' | 'POST_INSTAGRAM' | 'STORY_INSTAGRAM' | 'AFICHE_PRENSA';
 
 export const GraphicGenerator: React.FC = () => {
   const [format, setFormat] = useState<FormatType>('COMUNICADO_A4');
@@ -28,8 +28,8 @@ export const GraphicGenerator: React.FC = () => {
   const handleExportPNG = () => {
     // Generar documento SVG de alta fidelidad exportable y descargable
     const filename = `GAMEA_${format}_${folio}.svg`;
-    const w = format === 'POST_INSTAGRAM' ? 800 : format === 'STORY_INSTAGRAM' ? 720 : format === 'CREDENCIAL' ? 400 : 794;
-    const h = format === 'POST_INSTAGRAM' ? 800 : format === 'STORY_INSTAGRAM' ? 1280 : format === 'CREDENCIAL' ? 600 : 1123;
+    const w = format === 'POST_INSTAGRAM' ? 800 : format === 'STORY_INSTAGRAM' ? 720 : 794;
+    const h = format === 'POST_INSTAGRAM' ? 800 : format === 'STORY_INSTAGRAM' ? 1280 : 1123;
 
     const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
       <defs>
@@ -91,7 +91,7 @@ export const GraphicGenerator: React.FC = () => {
       <div className="ea-card" style={{ padding: '28px', height: 'fit-content' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
           <Layers size={22} color="var(--ea-secondary)" />
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Motor Generador Gráfico</h3>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Generador de Comunicados y Prensa</h3>
         </div>
 
         {/* Format Selector */}
@@ -104,7 +104,7 @@ export const GraphicGenerator: React.FC = () => {
               { id: 'COMUNICADO_A4', label: 'Comunicado A4' },
               { id: 'POST_INSTAGRAM', label: 'Post Redes (1:1)' },
               { id: 'STORY_INSTAGRAM', label: 'Story Redes (9:16)' },
-              { id: 'CREDENCIAL', label: 'Credencial Oficial' },
+              { id: 'AFICHE_PRENSA', label: 'Afiche Convocatoria' },
             ].map(f => (
               <button
                 key={f.id}
@@ -123,6 +123,18 @@ export const GraphicGenerator: React.FC = () => {
                 {f.label}
               </button>
             ))}
+          </div>
+
+          <div style={{
+            marginTop: '12px',
+            padding: '10px 12px',
+            borderRadius: '8px',
+            background: 'rgba(0, 143, 137, 0.12)',
+            border: '1px solid rgba(0, 143, 137, 0.3)',
+            fontSize: '0.75rem',
+            color: 'var(--ea-teal)'
+          }}>
+            💡 <strong>Nota:</strong> Para credenciales de funcionarios con foto y QR, notas membretadas y sellos, dirígete a <strong>Línea Gráfica & Materiales</strong>.
           </div>
         </div>
 

@@ -575,6 +575,48 @@ class DatabaseService {
       lastSync: new Date().toLocaleTimeString()
     };
   }
+
+  // --- LOGOTIPO MAESTRO INSTITUCIONAL ---
+
+  public getMasterLogo(): string | null {
+    if (typeof window === 'undefined') return null;
+    const saved = localStorage.getItem('ea_custom_master_logo');
+    if (saved) return saved;
+    const activa = this.getActiveLinea();
+    return activa?.logoUrl || null;
+  }
+
+  public setMasterLogo(dataUrl: string, userName: string = 'Dirección de Comunicación'): void {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ea_custom_master_logo', dataUrl);
+    }
+    const activa = this.getActiveLinea();
+    if (activa) {
+      activa.logoUrl = dataUrl;
+      activa.updatedAt = new Date().toISOString();
+      this.persistLineas();
+    }
+    this.addAudit('UPDATE_MASTER_LOGO', 'LOGOTIPO_OFICIAL', 'LGO_OFICIAL', { size: `${(dataUrl.length / 1024).toFixed(0)} KB` }, userName);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('ea_master_logo_updated', { detail: { logoUrl: dataUrl } }));
+    }
+  }
+
+  public resetMasterLogo(userName: string = 'Dirección de Comunicación'): void {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('ea_custom_master_logo');
+    }
+    const activa = this.getActiveLinea();
+    if (activa) {
+      delete activa.logoUrl;
+      activa.updatedAt = new Date().toISOString();
+      this.persistLineas();
+    }
+    this.addAudit('RESET_MASTER_LOGO', 'LOGOTIPO_OFICIAL', 'LGO_OFICIAL', { status: 'Restablecido a predeterminado' }, userName);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('ea_master_logo_updated', { detail: { logoUrl: null } }));
+    }
+  }
 }
 
 export const dbService = new DatabaseService();

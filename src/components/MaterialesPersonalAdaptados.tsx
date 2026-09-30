@@ -4,7 +4,8 @@ import {
   Secretaria, 
   FuncionarioPersonal, 
   MaterialCatalogo,
-  DEFAULT_MATERIALES_CATALOGO 
+  DEFAULT_MATERIALES_CATALOGO,
+  dbService
 } from '../services/dbService';
 import { 
   UserCheck, 
@@ -90,8 +91,18 @@ export const MaterialesPersonalAdaptados: React.FC<Props> = ({
     }
   };
 
-  // Helper para renderizar el logo SVG de la línea activa de forma segura
+  // Helper para renderizar el logo SVG de la línea activa o el logotipo oficial personalizado
   const renderLogo = (size: number = 44) => {
+    const masterLogo = dbService.getMasterLogo();
+    if (masterLogo) {
+      return (
+        <img 
+          src={masterLogo} 
+          alt="Logotipo Oficial" 
+          style={{ width: size, height: size, objectFit: 'contain', borderRadius: '4px' }} 
+        />
+      );
+    }
     return (
       <div 
         style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}

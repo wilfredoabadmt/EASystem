@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   BookOpen, 
   Download, 
@@ -12,18 +12,52 @@ import {
   Layers,
   Sparkles,
   Palette,
-  Type
+  Type,
+  Upload,
+  RotateCcw,
+  Camera,
+  ArrowRight
 } from 'lucide-react';
 import { BRAND_MODULES_16, BRAND_TOKENS } from '../tokens/brandTokens';
 import { BrandLogo } from './BrandLogo';
 import { AccessibilityContrastMatrix } from './AccessibilityContrastMatrix';
 import { W3CTokenExporter } from './W3CTokenExporter';
 import { PlainLanguageVoiceGuide } from './PlainLanguageVoiceGuide';
+import { BrandArchitecture } from './BrandArchitecture';
+import { dbService } from '../services/dbService';
 
-export const DigitalBrandBook: React.FC = () => {
-  const [activeModuleId, setActiveModuleId] = useState<number>(1);
+interface DigitalBrandBookProps {
+  onNavigateTab?: (tab: string) => void;
+  initialModuleId?: number;
+}
+
+export const DigitalBrandBook: React.FC<DigitalBrandBookProps> = ({ onNavigateTab, initialModuleId = 1 }) => {
+  const [activeModuleId, setActiveModuleId] = useState<number>(initialModuleId);
   const [safeAreaMultiplier, setSafeAreaMultiplier] = useState<number>(2);
   const [selectedVersion, setSelectedVersion] = useState<'color' | 'white'>('color');
+  const [customLogo, setCustomLogo] = useState<string | null>(() => dbService.getMasterLogo());
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (loadEvt) => {
+      const dataUrl = loadEvt.target?.result as string;
+      if (dataUrl) {
+        dbService.setMasterLogo(dataUrl);
+        setCustomLogo(dataUrl);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleResetLogo = () => {
+    if (window.confirm('¿Desea restablecer el logotipo a la versión predeterminada del sistema?')) {
+      dbService.resetMasterLogo();
+      setCustomLogo(null);
+    }
+  };
 
   const activeModule = BRAND_MODULES_16.find(m => m.id === activeModuleId) || BRAND_MODULES_16[0];
 
@@ -456,7 +490,85 @@ export const DigitalBrandBook: React.FC = () => {
         ) : activeModule.id === 7 || activeModule.id === 8 || activeModule.id === 9 ? (
           /* Módulo Imagotipo, Retícula y Área Segura Sandbox */
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+            {/* Panel de Personalización y Cambio de Logotipo Oficial */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(75, 0, 143, 0.25) 0%, rgba(245, 0, 123, 0.15) 100%)',
+              border: '1px solid rgba(245, 0, 123, 0.35)',
+              borderRadius: '16px',
+              padding: '20px 24px',
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '16px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{
+                  padding: '12px',
+                  background: 'var(--ea-primary)',
+                  borderRadius: '12px',
+                  color: '#FFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Camera size={24} />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>
+                      Logotipo Oficial del Municipio
+                    </h4>
+                    {customLogo ? (
+                      <span className="ea-badge ea-badge-teal" style={{ fontSize: '0.7rem' }}>
+                        ✓ Logotipo Personalizado Activo
+                      </span>
+                    ) : (
+                      <span className="ea-badge ea-badge-purple" style={{ fontSize: '0.7rem' }}>
+                        Predeterminado Oficial
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ margin: '4px 0 0 0', fontSize: '0.82rem', color: 'var(--ea-text-muted)' }}>
+                    Sube tu archivo (PNG transparente, SVG o JPG). Se actualizará en la barra superior, en las fichas oficiales y en todos los materiales.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleLogoUpload} 
+                  accept="image/*,.svg" 
+                  style={{ display: 'none' }} 
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="ea-btn ea-btn-primary"
+                  style={{ padding: '10px 18px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                  <Upload size={16} />
+                  <span>Subir / Cambiar Mi Logotipo</span>
+                </button>
+
+                {customLogo && (
+                  <button
+                    onClick={handleResetLogo}
+                    className="ea-btn ea-btn-secondary"
+                    style={{ padding: '10px 14px', fontSize: '0.82rem', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    title="Restablecer al logotipo predeterminado"
+                  >
+                    <RotateCcw size={15} />
+                    <span>Restablecer</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Controles de Versión Cromática y Margen de Seguridad */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button 
                   onClick={() => setSelectedVersion('color')}
@@ -488,7 +600,7 @@ export const DigitalBrandBook: React.FC = () => {
 
             {/* Interactive Grid Sandbox */}
             <div style={{
-              height: '320px',
+              minHeight: '320px',
               borderRadius: '16px',
               background: selectedVersion === 'white' ? 'var(--ea-primary)' : 'rgba(0,0,0,0.5)',
               display: 'flex',
@@ -497,7 +609,8 @@ export const DigitalBrandBook: React.FC = () => {
               position: 'relative',
               border: '1px solid var(--ea-border)',
               backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
-              backgroundSize: '20px 20px'
+              backgroundSize: '20px 20px',
+              padding: '40px 20px'
             }}>
               {/* Box de área segura interactiva */}
               <div style={{
@@ -505,7 +618,10 @@ export const DigitalBrandBook: React.FC = () => {
                 border: '1px dashed var(--ea-teal)',
                 borderRadius: '8px',
                 background: 'rgba(0, 143, 137, 0.08)',
-                position: 'relative'
+                position: 'relative',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}>
                 <span style={{
                   position: 'absolute',
@@ -520,7 +636,7 @@ export const DigitalBrandBook: React.FC = () => {
                 }}>
                   Área de Reserva {safeAreaMultiplier}X
                 </span>
-                <BrandLogo size={64} variant={selectedVersion} />
+                <BrandLogo size={68} variant={selectedVersion} allowUpload={true} />
               </div>
             </div>
           </div>
@@ -621,6 +737,44 @@ export const DigitalBrandBook: React.FC = () => {
             {/* Guía de Lenguaje Ciudadano y Cosmovisión Aymara */}
             <PlainLanguageVoiceGuide />
           </div>
+        ) : activeModule.id === 13 ? (
+          /* Módulo 13: Submarcas e Identificadores Subordinados */
+          <div>
+            <div style={{ marginBottom: '20px' }}>
+              <div className="ea-badge ea-badge-teal" style={{ marginBottom: '8px' }}>Normativa Oficial de Jerarquía</div>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>Arquitectura y Submarcas de Secretarías</h3>
+              <p style={{ color: 'var(--ea-text-muted)', fontSize: '0.88rem', marginTop: '4px' }}>
+                Genera los identificadores subordinados oficiales para secretarías y direcciones sin fragmentar la marca principal de El Alto.
+              </p>
+            </div>
+            <BrandArchitecture />
+          </div>
+        ) : activeModule.id === 14 || activeModule.id === 16 ? (
+          /* Módulo 14 y 16: Papelería y Credenciales */
+          <div>
+            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '16px' }}>{activeModule.title}</h3>
+            <div className="ea-card" style={{ padding: '36px', textAlign: 'center', background: 'rgba(75, 0, 143, 0.12)' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'var(--ea-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#FFF' }}>
+                <Sparkles size={28} />
+              </div>
+              <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>
+                {activeModule.id === 16 ? 'Credenciales Oficiales con Código QR y Fotografía' : 'Papelería Membretada, Sobres y Carpetas Oficiales'}
+              </h4>
+              <p style={{ color: 'var(--ea-text-muted)', maxWidth: '620px', margin: '0 auto 24px', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                Para evitar opciones duplicadas, la personalización completa, la asignación a funcionarios y la descarga en alta calidad de estos materiales se realiza en la sección oficial de <strong>Materiales del Personal</strong>.
+              </p>
+              {onNavigateTab && (
+                <button 
+                  onClick={() => onNavigateTab('LINEA_GRAFICA')}
+                  className="ea-btn ea-btn-primary"
+                  style={{ padding: '12px 24px', fontSize: '0.9rem', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                >
+                  <span>Abrir Materiales Adaptados del Personal</span>
+                  <ArrowRight size={16} />
+                </button>
+              )}
+            </div>
+          </div>
         ) : (
           /* Módulo Informativo Estándar */
           <div>
@@ -632,7 +786,7 @@ export const DigitalBrandBook: React.FC = () => {
               <div className="ea-card" style={{ flex: 1 }}>
                 <h4 style={{ color: 'var(--ea-teal)', marginBottom: '8px' }}>Uso Correcto</h4>
                 <p style={{ color: 'var(--ea-text-muted)', fontSize: '0.85rem' }}>
-                  Aplicar siempre los activos oficiales vectoriales descargados desde la biblioteca digital BAM.
+                  Aplicar siempre los activos oficiales vectoriales descargados desde la biblioteca digital.
                 </p>
               </div>
               <div className="ea-card" style={{ flex: 1 }}>

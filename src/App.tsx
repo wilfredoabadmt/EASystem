@@ -88,7 +88,7 @@ export const App: React.FC = () => {
         zIndex: 50
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <BrandLogo size={36} subbrand="Gestión de Marca" />
+          <BrandLogo size={36} subbrand="Gestión de Marca" allowUpload={true} />
           <span className="ea-badge ea-badge-purple" style={{ fontSize: '0.7rem' }}>
             {currentUser.secretaria}
           </span>
@@ -166,8 +166,8 @@ export const App: React.FC = () => {
       <main style={{ flex: 1, padding: '36px', maxWidth: '1600px', margin: '0 auto', width: '100%' }}>
         {currentTab === 'DASHBOARD' && <Dashboard user={currentUser} onNavigate={setCurrentTab} />}
         {currentTab === 'LINEA_GRAFICA' && <LineaGraficaManager userRole={currentUser.role} />}
-        {currentTab === 'BRAND_BOOK' && <DigitalBrandBook />}
-        {currentTab === 'ARCHITECTURE' && <BrandArchitecture />}
+        {currentTab === 'BRAND_BOOK' && <DigitalBrandBook onNavigateTab={(t) => setCurrentTab(t as any)} />}
+        {currentTab === 'ARCHITECTURE' && <DigitalBrandBook onNavigateTab={(t) => setCurrentTab(t as any)} initialModuleId={13} />}
         {currentTab === 'GENERATOR' && <GraphicGenerator />}
         {currentTab === 'VALIDATOR' && <BrandValidator />}
         {currentTab === 'BAM' && <BrandAssetManager />}
