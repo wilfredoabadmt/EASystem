@@ -87,7 +87,7 @@ El sistema fusiona el orgullo histórico y la fuerza productiva de la ciudad má
 1. **Dirección de Comunicación (DirCom)**: Máxima autoridad rectora de la narrativa, aprobación de campañas y control editorial.
 2. **Equipo de Diseño Gráfico Institucional**: Creadores de templates maestros, administradores del Brand Book y definidores de tokens.
 3. **Secretarías y Direcciones Municipales (Usuarios Operativos)**: Solicitantes y generadores de comunicados, afiches y convocatorias para sus programas.
-4. **Autoridades Municipales (Alcaldesa, Concejales, Secretarios)**: Validación de línea estratégica y recepción de reportes de impacto y tendencias.
+4. **Autoridades Municipales (Alcalde, Concejales, Secretarios)**: Validación de línea estratégica y recepción de reportes de impacto y tendencias.
 5. **Proveedores e Imprentas Autorizadas**: Acceso controlado y auditado para descarga de artes finales en CMYK/vector sin alterar especificaciones.
 6. **Auditores y Control Interno**: Supervisión de transparencia, historial y uso debido de la imagen oficial del Estado Municipal.
 7. **Ciudadanía Alteña**: Consumidores finales de una comunicación clara, digna, moderna, transparente y visualmente coherente.

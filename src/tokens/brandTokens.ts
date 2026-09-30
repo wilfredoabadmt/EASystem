@@ -51,7 +51,7 @@ export const BRAND_TOKENS = {
 };
 
 export const SECRETARIAS_MUNICIPALES = [
-  { id: 'alcaldia', name: 'Despacho de la Alcaldesa', code: 'DESP-ALC', color: '#4B008F' },
+  { id: 'alcaldia', name: 'Despacho del Alcalde', code: 'DESP-ALC', color: '#4B008F' },
   { id: 'comunicacion', name: 'Dirección de Comunicación Institucional', code: 'DIRCOM', color: '#F5007B' },
   { id: 'movilidad', name: 'Secretaría Municipal de Movilidad Urbana', code: 'SMMU', color: '#008F89' },
   { id: 'salud', name: 'Secretaría Municipal de Salud y Deportes', code: 'SMSD', color: '#008F89' },
