@@ -2,13 +2,16 @@
 
 > Proyecto gobernado por la metodología **SDD (Spec-Driven Development)** reforzado con Spec Kit.
 
-## Active feature: 002-postgresql-linea-grafica-crud
+## Active feature: 003-openrouter-alto-ia
 
-Plan técnico: [specs/002-postgresql-linea-grafica-crud/plan.md](specs/002-postgresql-linea-grafica-crud/plan.md)
-Especificación: [specs/002-postgresql-linea-grafica-crud/spec.md](specs/002-postgresql-linea-grafica-crud/spec.md)
-Tareas: [specs/002-postgresql-linea-grafica-crud/tasks.md](specs/002-postgresql-linea-grafica-crud/tasks.md)
+Plan técnico: [specs/003-openrouter-alto-ia/plan.md](specs/003-openrouter-alto-ia/plan.md)
+Especificación: [specs/003-openrouter-alto-ia/spec.md](specs/003-openrouter-alto-ia/spec.md)
+Tareas: [specs/003-openrouter-alto-ia/tasks.md](specs/003-openrouter-alto-ia/tasks.md)
 
-Persistencia en base de datos PostgreSQL, CRUD interactivo de Línea Gráfica Original / Maestra (subida de imagotipo, paleta cromática, patrones de aguayo, tipografías y eslóganes) y motor de adaptación automática a todo el kit de materiales que debe utilizar el personal municipal (credenciales, hojas membretadas, comunicados con QR, memorándums, afiches, plantillas de redes sociales y firmas de correo).
+Integración de OpenRouter API con catálogo de modelos gratuitos (`:free`) en Alto IA Assistant para redacción institucional, resolución de dudas de marca y generación de comunicados oficiales para la Dirección de Comunicación del GAMEA.
+
+## Feature previa: 002-postgresql-linea-grafica-crud
+Plan técnico: [specs/002-postgresql-linea-grafica-crud/plan.md](specs/002-postgresql-linea-grafica-crud/plan.md). Persistencia en PostgreSQL 16, CRUD de Línea Gráfica Original y adaptación automática a materiales del personal municipal.
 
 ## Feature previa: 001-easystem-core
 Plan técnico: [specs/001-easystem-core/plan.md](specs/001-easystem-core/plan.md). Construcción del core institucional: Landing pública, Brand Book interactivo de 16 módulos, Brand Architecture NYC, generador gráfico y validador de marca.
