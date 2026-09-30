@@ -24,6 +24,7 @@ import { AccessibilityContrastMatrix } from './AccessibilityContrastMatrix';
 import { W3CTokenExporter } from './W3CTokenExporter';
 import { PlainLanguageVoiceGuide } from './PlainLanguageVoiceGuide';
 import { BrandArchitecture } from './BrandArchitecture';
+import { OrganigramaMunicipal } from './OrganigramaMunicipal';
 import { dbService } from '../services/dbService';
 
 interface DigitalBrandBookProps {
@@ -447,7 +448,10 @@ export const DigitalBrandBook: React.FC<DigitalBrandBookProps> = ({ onNavigateTa
         </div>
 
         {/* Dynamic Sandbox Depending on Module */}
-        {activeModule.id === 5 || activeModule.id === 6 ? (
+        {activeModule.id === 2 ? (
+          /* Módulo 2: Estructura Organizacional Oficial 2026 (D.M. N° 200) */
+          <OrganigramaMunicipal onNavigateTab={onNavigateTab} />
+        ) : activeModule.id === 5 || activeModule.id === 6 ? (
           /* Módulo Aguayo y Patrones Textiles */
           <div>
             <h3 style={{ fontSize: '1.25rem', marginBottom: '16px' }}>Trama y Geometría del Aguayo Alteño</h3>

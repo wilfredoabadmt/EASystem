@@ -419,11 +419,27 @@ export const MaterialesPersonalAdaptados: React.FC<Props> = ({
                   cursor: 'pointer'
                 }}
               >
-                {secretarias.map(sec => (
-                  <option key={sec.id} value={sec.id}>
-                    {sec.sigla} — {sec.nombre}
-                  </option>
-                ))}
+                <optgroup label="── SECRETARÍAS MUNICIPALES Y GESTIÓN CENTRAL ──" style={{ background: '#090314', color: 'var(--ea-gold)' }}>
+                  {secretarias.filter(s => !s.sigla.startsWith('D-') && !['HMBH', 'TMEA'].includes(s.sigla)).map(sec => (
+                    <option key={sec.id} value={sec.id} style={{ background: '#150A2B', color: '#FFF' }}>
+                      {sec.sigla} — {sec.nombre}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="── SUBALCALDÍAS DISTRITALES (D-1 AL D-14) ──" style={{ background: '#090314', color: 'var(--ea-teal)' }}>
+                  {secretarias.filter(s => s.sigla.startsWith('D-')).map(sec => (
+                    <option key={sec.id} value={sec.id} style={{ background: '#150A2B', color: '#FFF' }}>
+                      {sec.sigla} — {sec.nombre}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="── ENTIDADES DESCONCENTRADAS Y DESCENTRALIZADAS ──" style={{ background: '#090314', color: 'var(--ea-secondary)' }}>
+                  {secretarias.filter(s => ['HMBH', 'TMEA'].includes(s.sigla)).map(sec => (
+                    <option key={sec.id} value={sec.id} style={{ background: '#150A2B', color: '#FFF' }}>
+                      {sec.sigla} — {sec.nombre}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
             </div>
 

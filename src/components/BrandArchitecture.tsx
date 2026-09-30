@@ -234,11 +234,19 @@ export const BrandArchitecture: React.FC = () => {
                 fontSize: '0.9rem'
               }}
             >
-              {SECRETARIAS_MUNICIPALES.map(s => (
-                <option key={s.id} value={s.id} style={{ background: '#150A2B' }}>
-                  {s.name} ({s.code})
-                </option>
-              ))}
+              {['Nivel Ejecutivo', 'Gestión Institucional', 'Secretaría Municipal', 'Subalcaldías Distritales', 'Hospitales Municipales', 'Entidades Descentralizadas'].map(cat => {
+                const items = SECRETARIAS_MUNICIPALES.filter(s => (s as any).category === cat);
+                if (items.length === 0) return null;
+                return (
+                  <optgroup key={cat} label={`── ${cat.toUpperCase()} ──`} style={{ background: '#090314', color: 'var(--ea-gold)' }}>
+                    {items.map(s => (
+                      <option key={s.id} value={s.id} style={{ background: '#150A2B', color: '#FFF' }}>
+                        {s.name} ({s.code})
+                      </option>
+                    ))}
+                  </optgroup>
+                );
+              })}
             </select>
           </div>
 

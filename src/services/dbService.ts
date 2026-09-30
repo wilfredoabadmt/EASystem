@@ -155,43 +155,121 @@ export const DEFAULT_LINEA_BICENTENARIO: LineaGrafica = {
 export const DEFAULT_SECRETARIAS: Secretaria[] = [
   {
     id: 'a0000000-0000-0000-0000-000000000001',
-    codigo: 'SEC-DIRCOM',
-    nombre: 'Dirección de Comunicación Institucional',
+    codigo: 'DIRCOM',
+    nombre: 'Dirección de Comunicación',
     titular: 'Lic. Nayra Choque Quispe',
     edificio: 'Jach\'a Uta - Piso 4',
     sigla: 'DIRCOM'
   },
   {
     id: 'a0000000-0000-0000-0000-000000000002',
-    codigo: 'SEC-MOVILIDAD',
-    nombre: 'Secretaría Municipal de Movilidad Urbana',
-    titular: 'Ing. Reynaldo Cazas Mamani',
-    edificio: 'Jach\'a Uta - Piso 2',
-    sigla: 'SMMU'
+    codigo: 'SMGI',
+    nombre: 'Secretaría Municipal de Gestión Institucional',
+    titular: 'Lic. Rómulo Alí Pérez',
+    edificio: 'Jach\'a Uta - Piso 4',
+    sigla: 'SMGI'
   },
   {
     id: 'a0000000-0000-0000-0000-000000000003',
-    codigo: 'SEC-SALUD',
-    nombre: 'Secretaría Municipal de Salud y Deportes',
-    titular: 'Dra. Beatriz Condori Callisaya',
-    edificio: 'Centro de Convenciones El Alto',
-    sigla: 'SMSD'
-  },
-  {
-    id: 'a0000000-0000-0000-0000-000000000004',
-    codigo: 'SEC-FINANZAS',
+    codigo: 'SMAF',
     nombre: 'Secretaría Municipal de Administración y Finanzas',
     titular: 'Lic. Carlos Huanca Tarqui',
     edificio: 'Jach\'a Uta - Piso 3',
     sigla: 'SMAF'
   },
   {
+    id: 'a0000000-0000-0000-0000-000000000004',
+    codigo: 'SMMU',
+    nombre: 'Secretaría Municipal de Movilidad Urbana',
+    titular: 'Ing. Reynaldo Cazas Mamani',
+    edificio: 'Jach\'a Uta - Piso 2',
+    sigla: 'SMMU'
+  },
+  {
     id: 'a0000000-0000-0000-0000-000000000005',
-    codigo: 'SEC-DESARROLLO',
+    codigo: 'SMEC',
+    nombre: 'Secretaría Municipal de Educación y Cultura',
+    titular: 'Lic. Edgar Añaguaya Quispe',
+    edificio: 'Centro de Convenciones El Alto',
+    sigla: 'SMEC'
+  },
+  {
+    id: 'a0000000-0000-0000-0000-000000000006',
+    codigo: 'SMDHSI',
+    nombre: 'Secretaría Municipal de Desarrollo Humano y Social Integral',
+    titular: 'Lic. Reyna Quispe Mayta',
+    edificio: 'Jach\'a Uta - Piso 1',
+    sigla: 'SMDHSI'
+  },
+  {
+    id: 'a0000000-0000-0000-0000-000000000007',
+    codigo: 'SMSC',
+    nombre: 'Secretaría Municipal de Seguridad Ciudadana',
+    titular: 'My. Juan Carlos Tarifa',
+    edificio: 'Centro Bol-110 El Alto',
+    sigla: 'SMSC'
+  },
+  {
+    id: 'a0000000-0000-0000-0000-000000000008',
+    codigo: 'SMS',
+    nombre: 'Secretaría Municipal de Salud',
+    titular: 'Dra. Beatriz Condori Callisaya',
+    edificio: 'Centro de Convenciones El Alto',
+    sigla: 'SMS'
+  },
+  {
+    id: 'a0000000-0000-0000-0000-000000000009',
+    codigo: 'SMIP',
+    nombre: 'Secretaría Municipal de Infraestructura Pública',
+    titular: 'Ing. Nancy Daza Loza',
+    edificio: 'Jach\'a Uta - Piso 2',
+    sigla: 'SMIP'
+  },
+  {
+    id: 'a0000000-0000-0000-0000-000000000010',
+    codigo: 'SMASGAR',
+    nombre: 'Secretaría Municipal de Agua, Saneamiento, Gestión Ambiental y Riesgos',
+    titular: 'Ing. Gabriel Pari Marca',
+    edificio: 'Jach\'a Uta - Planta Baja',
+    sigla: 'SMASGAR'
+  },
+  {
+    id: 'a0000000-0000-0000-0000-000000000011',
+    codigo: 'SMDE',
     nombre: 'Secretaría Municipal de Desarrollo Económico',
-    titular: 'Lic. Marisol Flores Tito',
+    titular: 'Lic. Bernardo Huanca',
     edificio: 'Centro de Innovación Tecnológica',
     sigla: 'SMDE'
+  },
+  // Subalcaldías Distritales (1 al 14)
+  ...Array.from({ length: 14 }, (_, i) => {
+    const num = i + 1;
+    const esRural = [9, 10, 11, 13].includes(num);
+    return {
+      id: `a0000000-0000-0000-0000-0000000000${(12 + i).toString().padStart(2, '0')}`,
+      codigo: `SDM-${num}`,
+      nombre: `Subalcaldía Distrito Municipal - ${num}`,
+      titular: `Subalcalde Distrital ${num}`,
+      edificio: `Sede Distrital ${num} (${esRural ? 'Área Rural' : 'Área Urbana'})`,
+      sigla: `D-${num}`
+    };
+  }),
+  // Hospitales y Descentralizados
+  {
+    id: 'a0000000-0000-0000-0000-000000000030',
+    codigo: 'HMBH',
+    nombre: 'Hospital Municipal Boliviano Holandés',
+    titular: 'Dirección Médica HMBH',
+    edificio: 'Ciudad Satélite - Distrito 1',
+    sigla: 'HMBH'
+  },
+  {
+    id: 'a0000000-0000-0000-0000-000000000031',
+    codigo: 'TMEA',
+    nombre: 'Terminal Metropolitana El Alto',
+    titular: 'Administración General TMEA',
+    edificio: 'Av. Ladislao Cabrera - Distrito 2',
+    sigla: 'TMEA'
   }
 ];
 
