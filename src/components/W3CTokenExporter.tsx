@@ -143,13 +143,13 @@ module.exports = {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <div className="ea-badge ea-badge-teal" style={{ marginBottom: '8px' }}>
-            Inspirado en MyDS (Gobierno de Malasia) & W3C DTCG
+            Estándar Internacional para Equipos de Diseño y Desarrollo
           </div>
           <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>
-            Exportador de Design Tokens Universales
+            Exportador de Colores y Estilos Institucionales
           </h3>
           <p style={{ color: 'var(--ea-text-muted)', fontSize: '0.85rem', margin: '4px 0 0 0' }}>
-            Exporta los tokens institucionales directamente a <strong>Figma Tokens Studio</strong>, Style Dictionary o Tailwind CSS.
+            Exporta los colores y tipografías oficiales para que diseñadores y desarrolladores web los usen en sus programas.
           </p>
         </div>
 
@@ -176,9 +176,9 @@ module.exports = {
       {/* Tabs de Formato */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '14px' }}>
         {[
-          { id: 'W3C_DTCG', label: 'W3C DTCG (Figma Tokens Studio)', icon: FileJson },
-          { id: 'CSS_VARS', label: 'CSS Variables (:root)', icon: Code },
-          { id: 'TAILWIND', label: 'Tailwind Config', icon: Terminal },
+          { id: 'W3C_DTCG', label: 'Formato Universal (JSON / Figma)', icon: FileJson },
+          { id: 'CSS_VARS', label: 'Variables Web (CSS)', icon: Code },
+          { id: 'TAILWIND', label: 'Configuración Web (Tailwind)', icon: Terminal },
         ].map(fmt => {
           const Icon = fmt.icon;
           const isActive = activeFormat === fmt.id;

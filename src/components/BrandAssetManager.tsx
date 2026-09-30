@@ -336,10 +336,10 @@ export const BrandAssetManager: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}>
             <Folder size={20} color="var(--ea-secondary)" />
-            <span>Estructura BAM</span>
+            <span>Carpetas de Archivos</span>
           </h3>
           <span className="ea-badge ea-badge-purple" style={{ fontSize: '0.7rem' }}>
-            {assets.length} activos
+            {assets.length} archivos
           </span>
         </div>
 
@@ -417,10 +417,10 @@ export const BrandAssetManager: React.FC = () => {
               onClick={handleDownloadAll}
               className="ea-btn ea-btn-secondary" 
               style={{ padding: '10px 18px', fontSize: '0.85rem' }}
-              title="Descarga el manifiesto completo de los activos institucionales"
+              title="Descarga el listado oficial de todos los archivos y logotipos disponibles"
             >
               <Download size={16} />
-              <span>Exportar Manifiesto</span>
+              <span>Descargar Listado Completo</span>
             </button>
           </div>
         </div>
@@ -571,7 +571,7 @@ export const BrandAssetManager: React.FC = () => {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <Upload size={22} color="var(--ea-secondary)" />
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>Subir Nuevo Material al BAM</h3>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>Subir Nuevo Material a la Biblioteca</h3>
               </div>
               <button 
                 onClick={() => setIsUploadOpen(false)}

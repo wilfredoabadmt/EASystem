@@ -31,7 +31,7 @@ export const BrandArchitecture: React.FC = () => {
   const getArchitectureVerdict = () => {
     if (step1EntityType === 'CENTRAL') {
       return {
-        level: 'Nivel 1: Master Brand (Marca Madre Monolítica)',
+        level: 'Nivel 1: Marca Principal Institucional (GAMEA Central)',
         badgeColor: 'ea-badge-purple',
         rule: 'Uso obligatorio del Imagotipo Oficial Central en máxima prominencia. El descriptor de la secretaría debe subordinarse a la derecha o inferior con proporción 1:0.35.',
         escudoRatio: '100% de escala estándar',
@@ -40,7 +40,7 @@ export const BrandArchitecture: React.FC = () => {
       };
     } else if (step1EntityType === 'DESCENTRALIZADA') {
       return {
-        level: 'Nivel 2: Endorsed Brand (Marca Avalada con Autonomía Operativa)',
+        level: 'Nivel 2: Marca Avalada Municipal (Con Autonomía Operativa)',
         badgeColor: 'ea-badge-teal',
         rule: 'La entidad (ej. Terminal Metropolitana, Buses Municipales) puede contar con identificador propio, pero debe incluir el endoso: "Una iniciativa del Gobierno Autónomo Municipal de El Alto".',
         escudoRatio: 'Mínimo 40% del área visual total',
@@ -77,18 +77,18 @@ export const BrandArchitecture: React.FC = () => {
         <div className="ea-badge ea-badge-purple" style={{ marginBottom: '12px' }}>
           Gobernanza Cívica — Queensland Government & NYC Standards
         </div>
-        <h2 style={{ fontSize: '2.2rem', fontWeight: 800 }}>Módulo Brand Architecture</h2>
+        <h2 style={{ fontSize: '2.2rem', fontWeight: 800 }}>Módulo de Jerarquía y Arquitectura de Marca</h2>
         <p style={{ color: 'var(--ea-text-muted)', maxWidth: '850px', marginTop: '8px', lineHeight: 1.6 }}>
-          Estructura jerárquica de la <strong>Marca Madre</strong> ("El Alto: Corazón de la Metrópoli") y su articulación formal con las Secretarías Municipales, Empresas Descentralizadas, Programas de Emergencia y Cooperantes Internacionales.
+          Estructura jerárquica de la <strong>Marca Principal</strong> ("El Alto: Corazón de la Metrópoli") y su articulación formal con las Secretarías Municipales, Empresas Descentralizadas, Programas de Emergencia y Cooperantes Internacionales.
         </p>
       </div>
 
-      {/* Árbol de Decisión Interactivo (Queensland Style) */}
+      {/* Árbol de Decisión Interactivo */}
       <div className="ea-card" style={{ padding: '32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
           <GitBranch size={22} color="var(--ea-teal)" />
           <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>
-            Árbol de Decisión de Arquitectura de Marca (Brand Decision Tool)
+            Guía Oficial de Decisión y Jerarquía de Marca
           </h3>
         </div>
         <p style={{ color: 'var(--ea-text-muted)', fontSize: '0.88rem', marginBottom: '24px' }}>
@@ -307,10 +307,10 @@ export const BrandArchitecture: React.FC = () => {
               }}
               className="ea-btn ea-btn-teal" 
               style={{ flex: 1 }}
-              title="Descargar logotipo oficial en formato SVG"
+              title="Descargar logotipo oficial en formato vectorial SVG"
             >
               <Download size={16} />
-              <span>Descargar SVG Vector</span>
+              <span>Descargar Vectorial (SVG)</span>
             </button>
             
             <button 
@@ -362,10 +362,10 @@ export const BrandArchitecture: React.FC = () => {
               }}
               className="ea-btn ea-btn-secondary" 
               style={{ flex: 1 }}
-              title="Descargar en alta resolución PNG 300DPI"
+              title="Descargar en alta resolución para impresión"
             >
               <Download size={16} />
-              <span>Descargar PNG 300DPI</span>
+              <span>Descargar Imagen Alta Calidad (PNG)</span>
             </button>
           </div>
         </div>
@@ -406,7 +406,7 @@ export const BrandArchitecture: React.FC = () => {
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
               <span>Jerarquía Primaria:</span>
-              <strong style={{ color: '#FFFFFF' }}>El Alto (Masterbrand)</strong>
+              <strong style={{ color: '#FFFFFF' }}>El Alto (Marca Principal - GAMEA)</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
               <span>Entidad Avalada:</span>

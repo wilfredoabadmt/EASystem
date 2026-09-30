@@ -137,10 +137,10 @@ export const OfficialGovBanner: React.FC = () => {
               </div>
               <div>
                 <div style={{ fontWeight: 800, color: '#FFFFFF', fontSize: '0.8rem', marginBottom: '3px' }}>
-                  Soberanía Tecnológica Municipal
+                  Soberanía y Seguridad Institucional
                 </div>
                 <p style={{ margin: 0, lineHeight: 1.4, fontSize: '0.72rem', color: '#9CA3AF' }}>
-                  EASystem opera bajo arquitectura soberana auto-alojada con base de datos PostgreSQL y auditoría criptográfica SHA-256 para cada logotipo y pieza emitida por las secretarías.
+                  EASystem opera bajo servidores institucionales seguros del Gobierno Municipal, con verificación de autenticidad para cada logotipo, afiche y documento emitido por las secretarías.
                 </p>
               </div>
             </div>

@@ -67,7 +67,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
             textAlign: 'center'
           }}>
             <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--ea-gold)' }}>LGO-2026</div>
-            <div style={{ fontSize: '0.7rem', color: 'var(--ea-text-muted)' }}>Línea Maestra BD</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--ea-text-muted)' }}>Línea Institucional</div>
           </div>
         </div>
       </div>
@@ -77,36 +77,36 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
         {[
           { 
             tab: 'BAM', 
-            label: 'Subir Mis Diseños (BAM)', 
-            desc: 'Biblioteca de activos vectoriales y logos', 
+            label: 'Biblioteca de Archivos', 
+            desc: 'Sube tus logotipos, afiches y archivos de diseño', 
             icon: Upload, 
             btnColor: 'ea-btn-primary' 
           },
           { 
             tab: 'LINEA_GRAFICA', 
-            label: 'Línea Gráfica Maestra', 
-            desc: 'CRUD en PostgreSQL y adaptación al personal', 
+            label: 'Línea Gráfica & Materiales', 
+            desc: 'Gestión de línea maestra y adaptación a credenciales, notas y afiches', 
             icon: Palette, 
             btnColor: 'ea-btn-teal' 
           },
           { 
             tab: 'GENERATOR', 
-            label: 'Generador Gráfico', 
-            desc: 'Comunicados A4, posts y credenciales', 
+            label: 'Generador de Piezas Gráficas', 
+            desc: 'Crea comunicados oficiales, afiches y credenciales en minutos', 
             icon: Sliders, 
             btnColor: 'ea-btn-secondary' 
           },
           { 
             tab: 'VALIDATOR', 
-            label: 'Auditor Brand Validator', 
-            desc: 'Escanear afiches e identificar infracciones', 
+            label: 'Validador de Diseños Oficiales', 
+            desc: 'Revisa que tus diseños cumplan con la normativa municipal', 
             icon: Scan, 
             btnColor: 'ea-btn-secondary' 
           },
           { 
             tab: 'ALTO_IA', 
-            label: 'Alto IA Assistant', 
-            desc: 'Asistente de marca con OpenRouter', 
+            label: 'Asistente Inteligente Alto IA', 
+            desc: 'Consultas y redacción de textos institucionales con Inteligencia Artificial', 
             icon: Bot, 
             btnColor: 'ea-btn-secondary' 
           }

@@ -33,7 +33,7 @@ export const BrandValidator: React.FC = () => {
       name: 'Integridad Geométrica del Imagotipo',
       passed: true,
       score: 30,
-      details: 'Sin distorsión de relación de aspecto (Delta = 0.0%). Proporciones vectoriales respetadas.'
+      details: 'Sin distorsión ni estiramiento (100% fiel al original). Proporciones vectoriales respetadas.'
     },
     {
       name: 'Cumplimiento Cromático Oficial (HEX)',
@@ -88,7 +88,7 @@ export const BrandValidator: React.FC = () => {
             name: 'Cumplimiento Cromático Oficial (HEX)',
             passed: true,
             score: 30,
-            details: 'Paleta Púrpura Alteño y Rosa identificada en el árbol DOM del SVG.'
+            details: 'Paleta oficial Púrpura Alteño y Rosa identificada correctamente en el diseño.'
           },
           {
             name: 'Área de Reserva y Retícula',
@@ -108,10 +108,10 @@ export const BrandValidator: React.FC = () => {
         setCurrentScore(score);
         setAudits([
           {
-            name: 'Formato Raster / Resolución',
+            name: 'Formato de Imagen / Calidad',
             passed: true,
             score: 25,
-            details: `Imagen raster ${file.type} (${(file.size / 1024).toFixed(0)} KB). Se recomienda exportar en SVG para imprenta.`
+            details: `Imagen digital ${file.type} (${(file.size / 1024).toFixed(0)} KB). Se recomienda archivo vectorial para imprenta.`
           },
           {
             name: 'Muestreo Cromático Predictivo',
@@ -180,7 +180,7 @@ export const BrandValidator: React.FC = () => {
           name: 'Integridad Geométrica del Imagotipo',
           passed: true,
           score: 30,
-          details: 'Sin distorsión de relación de aspecto (Delta = 0.0%). Proporciones vectoriales respetadas.'
+          details: 'Sin distorsión ni estiramiento. Proporciones vectoriales respetadas.'
         },
         {
           name: 'Cumplimiento Cromático Oficial (HEX)',
@@ -209,13 +209,13 @@ export const BrandValidator: React.FC = () => {
       {/* Upload & Controls */}
       <div className="ea-card" style={{ padding: '32px' }}>
         <div className="ea-badge ea-badge-teal" style={{ marginBottom: '12px' }}>
-          Computer Vision & Brand Intelligence
+          Auditoría Inteligente de Diseños Oficiales
         </div>
         <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px' }}>
-          Brand Validator
+          Validador de Diseños Oficiales
         </h2>
         <p style={{ color: 'var(--ea-text-muted)', fontSize: '0.9rem', marginBottom: '24px' }}>
-          Auditoría algorítmica para piezas gráficas generadas por imprentas, secretarías o agencias externas.
+          Revisión automática de piezas gráficas para secretarías, direcciones e imprentas.
         </p>
 
         {/* Dropzone Conectado a Archivo Real */}
@@ -329,7 +329,7 @@ export const BrandValidator: React.FC = () => {
             </div>
             <div style={{ fontSize: '0.8rem', lineHeight: 1.2 }}>
               <strong>{currentScore >= 80 ? 'MARCA AUTORIZADA' : 'PIEZA OBSERVADA'}</strong><br />
-              <span style={{ color: 'var(--ea-text-muted)' }}>Índice Brand Score</span>
+              <span style={{ color: 'var(--ea-text-muted)' }}>Índice de Aprobación</span>
             </div>
           </div>
         </div>

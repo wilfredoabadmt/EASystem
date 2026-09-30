@@ -109,7 +109,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
       reloadData();
       setIsModalOpen(false);
       setEditingLinea(null);
-      showToast('Línea gráfica guardada y sincronizada exitosamente en PostgreSQL.', 'success');
+      showToast('Línea gráfica guardada y sincronizada exitosamente en el sistema municipal.', 'success');
     } catch (err: any) {
       showToast(`Error al guardar: ${err.message}`, 'error');
     }
@@ -124,7 +124,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm('¿Está seguro de eliminar esta línea gráfica de la base de datos PostgreSQL?')) {
+    if (window.confirm('¿Está seguro de eliminar esta línea gráfica del sistema municipal?')) {
       const res = dbService.deleteLineaGrafica(id);
       if (res.success) {
         reloadData();
@@ -136,7 +136,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
   };
 
   const handleResetDefaults = () => {
-    if (window.confirm('¿Restablecer datos semilla oficiales de PostgreSQL?')) {
+    if (window.confirm('¿Restablecer las líneas gráficas originales del Gobierno Autónomo Municipal de El Alto?')) {
       dbService.resetToDefaults();
       reloadData();
       showToast('Base de datos restablecida a los valores oficiales de GAMEA.', 'info');
@@ -201,7 +201,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
                 Gobernanza de Línea Gráfica Original & Materiales
               </h2>
               <span className="ea-badge ea-badge-purple" style={{ fontSize: '0.7rem' }}>
-                POSTGRESQL RELACIONAL
+                SISTEMA CENTRAL ACTIVO
               </span>
             </div>
             <p style={{ margin: '4px 0 0 0', color: 'var(--ea-text-muted)', fontSize: '0.85rem' }}>
@@ -210,7 +210,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
           </div>
         </div>
 
-        {/* PostgreSQL Status Indicator Card */}
+        {/* Indicador de Estado del Sistema */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -228,8 +228,8 @@ export const LineaGraficaManager: React.FC<Props> = () => {
             boxShadow: '0 0 10px #10B981'
           }} />
           <div style={{ fontSize: '0.75rem' }}>
-            <div style={{ fontWeight: 700, color: '#10B981' }}>{dbInfo.engine}</div>
-            <div style={{ color: 'var(--ea-text-muted)' }}>BD: <strong>{dbInfo.database}</strong> · Tablas: {dbInfo.tablesCount} · Registros: {dbInfo.recordsCount}</div>
+            <div style={{ fontWeight: 700, color: '#10B981' }}>Registro Central del Municipio</div>
+            <div style={{ color: 'var(--ea-text-muted)' }}>Base Oficial: <strong>GAMEA Central</strong> · Módulos: {dbInfo.tablesCount} · Registros: {dbInfo.recordsCount}</div>
           </div>
           <button 
             onClick={reloadData} 
@@ -279,7 +279,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
             style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}
           >
             <History size={16} />
-            <span>3. Trazabilidad & Hash Chain</span>
+            <span>3. Historial de Auditoría y Cambios</span>
           </button>
         </div>
 
@@ -288,9 +288,9 @@ export const LineaGraficaManager: React.FC<Props> = () => {
             onClick={handleResetDefaults}
             className="ea-btn ea-btn-secondary"
             style={{ fontSize: '0.8rem', padding: '8px 14px' }}
-            title="Restablecer semillas originales"
+            title="Restablecer diseños originales"
           >
-            Restaurar Seeds GAMEA
+            Restablecer Diseños Predeterminados
           </button>
 
           <button
@@ -414,7 +414,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
                   {/* Desglose de Paleta Cromática */}
                   <div>
                     <div style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--ea-text-muted)', marginBottom: '6px', textTransform: 'uppercase' }}>
-                      Tokens Cromáticos Registrados en BD:
+                      Colores Oficiales Registrados:
                     </div>
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                       {[
@@ -481,7 +481,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
                           onClick={() => handleDelete(linea.id)}
                           className="ea-btn ea-btn-secondary"
                           style={{ padding: '6px 10px', color: '#EF4444' }}
-                          title="Eliminar de PostgreSQL"
+                          title="Eliminar del Sistema"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -518,10 +518,10 @@ export const LineaGraficaManager: React.FC<Props> = () => {
               <ShieldCheck size={24} color="var(--ea-teal)" />
               <div>
                 <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>
-                  Registro de Auditoría Criptográfica (audit.logs)
+                  Historial de Modificaciones y Auditoría Oficial
                 </h3>
                 <span style={{ fontSize: '0.8rem', color: 'var(--ea-text-muted)' }}>
-                  Cadena de hashes SHA-256 inmutable almacenada en PostgreSQL. Cada cambio de línea o edición genera un bloque verificable.
+                  Registro de auditoría inmutable del Gobierno Autónomo Municipal de El Alto. Cada edición queda registrada con fecha, hora y usuario responsable.
                 </span>
               </div>
             </div>
@@ -534,12 +534,12 @@ export const LineaGraficaManager: React.FC<Props> = () => {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--ea-border)', textAlign: 'left', color: 'var(--ea-text-muted)' }}>
-                  <th style={{ padding: '10px' }}>TIMESTAMP</th>
+                  <th style={{ padding: '10px' }}>FECHA Y HORA</th>
                   <th style={{ padding: '10px' }}>USUARIO / AUTORIDAD</th>
                   <th style={{ padding: '10px' }}>ACCIÓN</th>
                   <th style={{ padding: '10px' }}>RECURSO</th>
-                  <th style={{ padding: '10px' }}>HASH ANTERIOR</th>
-                  <th style={{ padding: '10px' }}>RECORD HASH (SHA-256)</th>
+                  <th style={{ padding: '10px' }}>CÓDIGO PREVIO</th>
+                  <th style={{ padding: '10px' }}>CÓDIGO DE AUTENTICIDAD</th>
                 </tr>
               </thead>
               <tbody>
@@ -613,7 +613,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
                 </div>
                 <div>
                   <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>
-                    {editingLinea.id ? 'Editar Línea Gráfica en PostgreSQL' : 'Subir / Registrar Nueva Línea Gráfica Original'}
+                    {editingLinea.id ? 'Editar Línea Gráfica Oficial' : 'Subir / Registrar Nueva Línea Gráfica Original'}
                   </h3>
                   <span style={{ fontSize: '0.8rem', color: 'var(--ea-text-muted)' }}>
                     Los valores configurados aquí se adaptarán de inmediato a las credenciales, notas, comunicados y afiches del personal.
@@ -843,7 +843,7 @@ export const LineaGraficaManager: React.FC<Props> = () => {
                     className="ea-btn ea-btn-primary"
                     style={{ padding: '10px 24px', fontWeight: 800 }}
                   >
-                    Guardar en PostgreSQL
+                    Guardar en el Sistema Oficial
                   </button>
                 </div>
               </div>

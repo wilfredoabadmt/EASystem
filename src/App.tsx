@@ -88,7 +88,7 @@ export const App: React.FC = () => {
         zIndex: 50
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <BrandLogo size={36} subbrand="Brand Manager" />
+          <BrandLogo size={36} subbrand="Gestión de Marca" />
           <span className="ea-badge ea-badge-purple" style={{ fontSize: '0.7rem' }}>
             {currentUser.secretaria}
           </span>
@@ -97,14 +97,14 @@ export const App: React.FC = () => {
         {/* Navigation Tabs */}
         <div style={{ display: 'flex', gap: '6px' }}>
           {[
-            { id: 'DASHBOARD', label: 'Dashboard', icon: LayoutDashboard },
-            { id: 'LINEA_GRAFICA', label: 'Línea Gráfica & Materiales', icon: Palette, badge: 'Postgres' },
-            { id: 'BRAND_BOOK', label: 'Digital Brand Book', icon: BookOpen },
-            { id: 'ARCHITECTURE', label: 'Brand Architecture', icon: Layers },
-            { id: 'GENERATOR', label: 'Generador Gráfico', icon: Sliders },
-            { id: 'VALIDATOR', label: 'Brand Validator', icon: Scan },
-            { id: 'BAM', label: 'Biblioteca BAM', icon: Folder },
-            { id: 'ALTO_IA', label: 'Alto IA Assistant', icon: Bot },
+            { id: 'DASHBOARD', label: 'Panel Principal', icon: LayoutDashboard },
+            { id: 'LINEA_GRAFICA', label: 'Línea Gráfica & Materiales', icon: Palette, badge: 'Oficial' },
+            { id: 'BRAND_BOOK', label: 'Manual de Marca Digital', icon: BookOpen },
+            { id: 'ARCHITECTURE', label: 'Jerarquía de Marca', icon: Layers },
+            { id: 'GENERATOR', label: 'Generador de Piezas', icon: Sliders },
+            { id: 'VALIDATOR', label: 'Validador de Diseños', icon: Scan },
+            { id: 'BAM', label: 'Biblioteca de Archivos', icon: Folder },
+            { id: 'ALTO_IA', label: 'Asistente Alto IA', icon: Bot },
           ].map(tab => (
             <button
               key={tab.id}

@@ -304,7 +304,7 @@ export const MaterialesPersonalAdaptados: React.FC<Props> = ({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span className="ea-badge ea-badge-gold" style={{ fontSize: '0.7rem' }}>
-                LÍNEA MAESTRA ACTIVA EN POSTGRESQL
+                LÍNEA INSTITUCIONAL VIGENTE
               </span>
               <span style={{ fontSize: '0.8rem', color: 'var(--ea-text-muted)' }}>
                 {lineaActiva.codigo}
